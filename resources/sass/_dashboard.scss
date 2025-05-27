@@ -1,0 +1,389 @@
+.dashboard-layout {
+    width: 100%;
+    flex-wrap: wrap;
+    height: 100%;
+    position: relative;
+    @include screen-md-min {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    > nav.aside-links {
+        height: 100%;
+        width: 250px;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        transition: transform 0.4s ease;
+        transform: translate(-100%, 0);
+        z-index: 11;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        @include screen-md-min {
+            transform: translate(0, 0);
+            //position:static;
+            box-shadow: none;
+        }
+        &.show-side-bar {
+            transform: translate(0, 0);
+        }
+        @include screen-md-min {
+            width: 210px;
+        }
+        @media (min-width: 1750px) {
+            width: 350px;
+        }
+        .dash-toggler {
+            position: absolute;
+            right: -45px;
+            top: 30px;
+            width: 45px;
+            height: 45px;
+            background-color: #f1f1f1;
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16),
+                0 3px 6px rgba(0, 0, 0, 0.23);
+            transition: box-shadow 0.4s ease;
+            @include screen-md-min {
+                display: none;
+            }
+            &:before {
+                content: "";
+                position: absolute;
+                left: -10px;
+                width: 10px;
+                top: -5px;
+                bottom: -5px;
+                background-color: #f1f1f1;
+                z-index: 2;
+            }
+            &.dash-sidebar-open {
+                .icon {
+                    transform: rotate(-180deg);
+                }
+            }
+            .icon {
+                transition: transform 0.4s ease;
+                font-size: 25px;
+                color: #222;
+            }
+        }
+        .dashboardnavwrapper {
+            background-color: #f1f1f1;
+            height: 100vh;
+            position: fixed;
+            width: 250px;
+            top: 0;
+            @include screen-md-min {
+                width: 210px;
+            }
+            @media (min-width: 1750px) {
+                width: 350px;
+            }
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-bottom: 1px solid #c0c0c0;
+            @media (min-width: 1750px) {
+                flex-direction: row;
+                justify-content: flex-start;
+            }
+            img {
+                width: 80px;
+                @include screen-md-min {
+                    //width: 40px;
+                }
+                @media (min-width: 1750px) {
+                    // width: 80px;
+                }
+            }
+            .navbar-brand {
+                margin: 0;
+                @include screen-lg {
+                    margin-right: 15px;
+                }
+            }
+            > span {
+                text-align: left;
+                display: inline;
+                margin-top: 15px;
+                @media (min-width: 1750px) {
+                    text-align: left;
+                }
+                > span {
+                    white-space: nowrap;
+                    font-weight: 500;
+                    font-size: 16px;
+                    display: block;
+                    @include screen-sm-min {
+                        font-size: responsive-px(14, 18, 768, 1920);
+                    }
+                }
+            }
+        }
+        .dash-navigation {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            flex-direction: column;
+            a {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                width: 100%;
+                height: 45px;
+                color: #000;
+                font-size: responsive-px(16, 20, 320, 768);
+                padding: 10px 15px;
+                @include screen-sm-min {
+                    font-size: responsive-px(16, 22, 768, 1920);
+                }
+                transition: background-color 0.4s ease;
+                @include screen-md-min {
+                    padding: 0 1rem;
+                    //padding-right: 1rem;
+                    //padding-left: 0;
+                    font-size: responsive-px(16, 16, 768, 1920);
+                }
+                .svg-inline--fa {
+                    margin-right: 10px;
+                }
+                span {
+                    transition: font-weight 0.4s ease;
+                    margin-left: 15px;
+                    font-size: 18px;
+                    white-space: break-spaces;
+                    line-height: 1;
+                    display: inline;
+                }
+                &:hover {
+                    background-color: #fff;
+                    span {
+                        color: $primary-color;
+                    }
+                }
+            }
+        }
+    }
+    > main {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+        position: relative;
+        padding: 5%;
+
+        @include screen-md-min {
+            width: calc(100% - 210px);
+            margin-right: 0;
+            margin-left: auto;
+        }
+        @media (min-width: 1750px) {
+            width: calc(100% - 350px);
+        }
+        > * {
+            width: 100%;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            @include screen-sm-min {
+                margin-bottom: responsive-px(30, 60, 768, 1920);
+            }
+        }
+
+        > nav {
+            justify-content: flex-start;
+            flex-direction: row-reverse;
+            height: 100px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 0;
+            .navbar-toggler {
+                margin-right: 30px;
+            }
+            div.navbar-collapse {
+                flex-basis: 100%;
+                margin-right: 00px;
+                background-color: #fff;
+                border-bottom: 3px solid rgb(70, 66, 66);
+                box-shadow: 0 2px 0px rgba(#222, 0.5);
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                transform: translateY(100%);
+                z-index: 10;
+                overflow-x: hidden;
+                padding-bottom: 15px;
+                @media (min-width: 768px) {
+                    overflow-x: visible;
+                    padding-bottom: 0;
+                    border: none;
+                    box-shadow: none;
+                    position: static;
+                    flex-basis: 100%;
+                    margin-right: 0;
+                    transform: translateY(0);
+                }
+            }
+            .navbar-nav {
+                width: auto;
+                > * {
+                    padding-left: 15px;
+                    width: 100%;
+                    @include screen-sm-min {
+                        width: auto;
+                        padding-left: 0;
+                    }
+                }
+                @media (min-width: 768px) {
+                    padding-right: 30px;
+                    position: static;
+                    transform: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    width: 100%;
+                    flex-direction: column;
+                    @include screen-sm-min {
+                        flex-direction: row;
+                    }
+                }
+                .nav-item {
+                    #change_password_a {
+                        &:after {
+                            content: "";
+                            width: 5px;
+                            height: 5px;
+                            border-radius: 50%;
+                            background-color: #263238;
+                            position: absolute;
+                            left: 10px;
+                            top: 50%;
+                            transform: translate(0, -50%);
+                            display: none;
+                            @include screen-sm-min {
+                                display: inline-block;
+                            }
+                        }
+                    }
+                    span {
+                        padding: 5px;
+                        margin-right: 0px;
+                        color: $primary-color;
+                        font-weight: 500;
+                        display: inline-block;
+                        position: relative;
+                        @include screen-sm-min {
+                            margin-left: 15px;
+                        }
+                        &:after {
+                            content: "";
+                            width: 5px;
+                            height: 5px;
+                            border-radius: 50%;
+                            background-color: #263238;
+                            position: absolute;
+                            right: -17px;
+                            top: 50%;
+                            transform: translate(0, -50%);
+                            display: none;
+                            @include screen-sm-min {
+                                display: inline-block;
+                            }
+                        }
+                    }
+                    a {
+                        padding: 5px;
+                        display: inline-block;
+                        margin-left: 0px;
+                        margin-top: 5px;
+                        color: $blue;
+                        font-weight: 400;
+                        position: relative;
+                        @include screen-sm-min {
+                            margin-top: 0;
+                            margin-left: 25px;
+                        }
+                        &:hover {
+                            &:after {
+                                height: 2px;
+                            }
+                        }
+                        &:after {
+                            content: "";
+                            transition: height 0.4s ease;
+                            width: 100%;
+                            height: 0;
+                            background-color: $blue;
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            display: none;
+                            @include screen-sm-min {
+                                display: inline-block;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        footer {
+            background-color: $black_1;
+            padding: 45px 15%;
+            display: flex;
+            justify-content: space-between;
+            color: #fff;
+            .logo {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                > span {
+                    font-size: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                }
+            }
+            .footer-links {
+                padding: 0;
+                list-style: none;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                li {
+                    padding: 5px 15px;
+                    a {
+                        color: #fff;
+                        font-size: 12px;
+                        border-bottom: 1px solid #fff;
+                    }
+                }
+            }
+        }
+    }
+}
+.dashboard_page {
+    padding-top: 145px;
+}
+span.ant-modal-close-x {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,966 @@
+$header-bg: #ffefcd;
+$background-yellow: #fff7e7;
+$background-yellow-2:#fff2d9;
+$ginda: #a03754;
+$rojo-inicial-gradiente: #3b2d30;
+$rojo-central-gradiente: #692e41;
+$rojo-gradiente: #ed2f59;
+$text-color-brown:#663300;
+$text-color-black-1:#373435;
+$separator-gold:#cc9933;
+.expo-emprendedores-welcome,
+#expo-emprendedores-spa,
+#app_layout {
+    header {
+        background-color: $header-bg;
+        background-position: center;
+        background-size: cover;
+        position: relative;
+        padding-top: 8%;
+        padding-top: 8%;
+        @include screen-sm-min {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 8%;
+            padding-bottom: 0;
+        }
+        > div {
+            padding: 45px 30px;
+            position: relative;
+            z-index: 5;
+            @include screen-sm-min {
+                padding: 0 30px;
+            }
+            img {
+                width: 100%;
+            }
+            &.left-content {
+                @include screen-sm-min {
+                    width: 50%;
+                    padding-bottom: responsive-px(30, 60, 768, 1920);
+                    padding-right: 0;
+                    position: static;
+                }
+                > div:last-child {
+                    width: 100%;
+                    margin: 0 auto;
+                    margin-top: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    > span {
+                        width: calc(50% - 30px);
+                        &:nth-child(1) {
+                            position: relative;
+                            &:before {
+                                content: "";
+                                position: absolute;
+                                top: 0;
+                                right: -30px;
+                                height: 90%;
+                                width: 3px;
+                                background-color: $ginda;
+                            }
+                        }
+                        &:last-child {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            flex-direction: column;
+                            text-align: center;
+                            font-weight: 700;
+                            color: $ginda;
+                            font-size: responsive-px(20, 50, 320, 768);
+                            @include screen-sm-min {
+                                font-size: responsive-px(20, 50, 768, 1920);
+                            }
+                        }
+                    }
+                }
+                // > span {
+                //     position: absolute;
+                //     bottom: 30px;
+                //     right: 50%;
+                //     transform: translate(50%, 80%);
+                //     max-width: responsive-px(80, 160, 320, 768);
+                //     @include screen-sm-min {
+                //         max-width: responsive-px(100, 250, 768, 1920);
+
+                //         transform: translateX(50%);
+                //     }
+                //     > span {
+                //         font-weight: 700;
+                //         position: absolute;
+                //         top: 50%;
+                //         left: 50%;
+                //         transform: translate(-50%, -50%);
+                //         color: $ginda;
+                //         font-size: responsive-px(12, 24, 320, 768);
+                //         text-align: center;
+                //         @include screen-sm-min {
+                //             font-size: responsive-px(14, 30, 768, 1920);
+                //         }
+                //     }
+                // }
+            }
+            &.right-content {
+                padding: 0;
+                max-width: 50%;
+                margin: 0 auto;
+                @include screen-sm-min {
+                    margin-right: 0;
+                    width: 20%;
+                    img{
+                        width: 100%;
+                    }
+                    span {
+                        height: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: flex-end;
+                    }
+                }
+            }
+        }
+        .date-image {
+            max-width: 40%;
+            display: block;
+            margin: 0 auto;
+            @include screen-sm-min{
+                max-width: none;
+                top:50%;
+                position: absolute;
+                left: 55%;
+                width: 15%;
+                transform: translateY(-50%);
+            }
+            img {
+                width: 100%;
+            }
+            z-index: 10;
+        }
+    }
+    main {
+        .benefits{
+            .section-header{
+                img{
+                    width: 100%;
+                }
+                margin-bottom: 30px;
+            }
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: column;
+            padding:2% 0;
+            h4,p{
+                padding-left: 10%;
+                padding-right: 10%;
+            }
+            h4{
+                width: 100%;
+                text-align: left;
+                color:$text-color-brown;
+                font-weight: 700;
+                font-size: responsive-px(14,26,320,768);
+                margin-bottom: 10px;
+                @include screen-sm-min{
+                    font-size: responsive-px(18,30,768,1920);
+                }
+            }
+            p{
+                width: 100%;
+                text-align: justify;
+                font-weight: 700;
+                font-size: responsive-px(12,22,320,768);
+                @include screen-sm-min{
+                    
+                    font-size: responsive-px(12,22,768,1920);
+                }
+                &:first-of-type{
+                    font-size: responsive-px(14,26,320,768);
+                    @include screen-sm-min{
+                        
+                        font-size: responsive-px(14,26,768,1920);
+                    }
+                }
+                &:last-of-type{
+                    text-align: center;
+                    font-size: responsive-px(14,28,320,768);
+                    @include screen-sm-min{
+                        
+                        font-size: responsive-px(14,28,768,1920);
+                    }
+                }
+            }
+            a{
+                    margin: 0 auto ;
+                    margin-top: 15px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 30px;
+                    width: 180px;
+                    height: 50px;
+                    background: transparent;
+                    color: $text-color-brown;
+                    border: 2px solid $text-color-brown;
+                    background: transparent;
+                    font-weight: 600;
+                    font-size: responsive-px(18, 30, 320, 768);
+                    transition: all .4s ease;
+                    line-height: 1;
+                    background-color: $background-yellow-2;
+                    @include screen-sm-min {
+                        font-size: responsive-px(
+                            18,
+                            30,
+                            768,
+                            1920
+                        );
+                    }
+                    span {
+                        line-height: 1;
+                        margin-top: -2px;
+                    }
+                    &:hover{
+                        background-color: $text-color-brown;
+                        color:$header-bg;
+                    }
+                
+            }
+        }
+        .how-participate{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: column;
+            padding:2% 10%;
+            h3{
+                color:$text-color-brown;
+                font-weight: 700;
+                font-size: responsive-px(20,30,320,768);
+                margin-bottom: 10px;
+                text-align: center;
+                @include screen-sm-min{
+                    font-size: responsive-px(28,40,768,1920);
+                }
+            }
+            p{
+                font-weight: 700;
+                font-size: responsive-px(14,24,320,768);
+                text-align: center;
+                @include screen-sm-min{
+                    
+                    font-size: responsive-px(14,28,768,1920);
+                }
+            }
+            a{
+                    margin: 0 auto ;
+                    margin-top: 15px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 30px;
+                    width: 180px;
+                    height: 50px;
+                    background: transparent;
+                    color: $text-color-brown;
+                    border: 2px solid $text-color-brown;
+                    background: transparent;
+                    font-weight: 600;
+                    font-size: responsive-px(18, 30, 320, 768);
+                    transition: all .4s ease;
+                    line-height: 1;
+                    @include screen-sm-min {
+                        font-size: responsive-px(
+                            18,
+                            30,
+                            768,
+                            1920
+                        );
+                    }
+                    span {
+                        line-height: 1;
+                        margin-top: -2px;
+                    }
+                    &:hover{
+                        background-color: $text-color-brown;
+                        color:$header-bg;
+                    }
+                
+            }
+        }
+        .beneficios-cuestionario {
+            position: relative;
+            padding: 5% 10%;
+        
+            background: #fff;
+            > * {
+                position: relative;
+                z-index: 2;
+            }
+            @include screen-sm-min {
+                padding: 3% 5%;
+                display: flex;
+                justify-content: space-between;
+            }
+            > div {
+                img {
+                    width: 100%;
+                }
+                &.left-content {
+                    padding-bottom: 30px;
+                
+                    @include screen-sm-min {
+                        width:calc( 70% - 60px);
+                        padding-bottom: 0;
+                        border-left: 3px solid $separator-gold;
+                        margin-left: 60px;
+                        padding-left: 60px;
+                    }
+                    >div{
+                        background-color: $background-yellow;
+                        padding: 15px;
+                        h3{
+                            color:$text-color-brown;
+                            font-weight: 700;
+                            font-size: responsive-px(20,40,320,768);
+                            @include screen-sm-min{
+                                
+                                font-size: responsive-px(30,65,768,1920);
+                            }
+                        }
+                        p{
+                            color:$text-color-black-1;
+                            font-weight: 600;
+                            font-size: responsive-px(16,26,320,768);
+                            line-height: 1;
+                            text-align: justify;
+                            @include screen-sm-min{
+                                
+                                font-size: responsive-px(14,30,768,1920);
+                            }
+                        }
+                    }
+                }
+                &.right-content {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: space-between;
+                    @include screen-sm-min {
+                        width: 40%;
+                    }
+                    .form-image{
+                        display: block;
+                        margin: 0 auto;
+                        width:80%;
+                        padding:15px; 
+                        >div >div{
+                            padding:0;
+                            margin-left: 0;
+                        }
+                        img{
+                            max-width: 100%;
+                        }
+                    }
+                    a{
+                        margin: 15px auto ;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 30px;
+                        width: 180px;
+                        height: 50px;
+                        background: transparent;
+                        color: $text-color-brown;
+                        border: 2px solid $text-color-brown;
+                        background: transparent;
+                        font-weight: 600;
+                        font-size: responsive-px(18, 30, 320, 768);
+                        transition: all .4s ease;
+                        line-height: 1;
+                        background-color: $background-yellow-2;
+                        @include screen-sm-min {
+                            font-size: responsive-px(
+                                18,
+                                30,
+                                768,
+                                1920
+                            );
+                        }
+                        span {
+                            line-height: 1;
+                            margin-top: -2px;
+                        }
+                        &:hover{
+                            background-color: $text-color-brown;
+                            color:$header-bg;
+                        }
+                    
+                }
+                    >div{ 
+                        background-color: $header-bg;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: space-between;
+                        border:4px solid $text-color-brown;
+                        width: 100%;
+                        border-radius: 30px;
+                        padding:15px;
+                        h3 {
+                            color: $text-color-brown;
+                            font-weight: 800;
+                            font-size: responsive-px(15, 32, 320, 768);
+                            @include screen-sm-min {
+                                font-size: responsive-px(18, 42, 768, 1920);
+                            }
+                        }
+                        #time-counter {
+                            color: #000;
+                            font-weight: 800;
+                            font-size: responsive-px(14, 28, 320, 768);
+                            @include screen-sm-min {
+                                font-size: responsive-px(16, 30, 768, 1920);
+                            }
+                        }
+                        form {
+                            label {
+                                color: #000;
+                            }
+                            >div{
+                                margin-bottom: 5px;
+                            }
+                            .ant-row.ant-form-item:last-child {
+                                .ant-form-item-control-input-content {
+                                    text-align: center;
+                                    button {
+                                        margin: 0 auto;
+                                        margin-top: 5px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        border-radius: 30px;
+                                        width: 80%;
+                                        height: 50px;
+                                        background: transparent;
+                                        color: $text-color-brown;
+                                        border: 2px solid $text-color-brown;
+                                        background: transparent;
+                                        font-weight: 600;
+                                        font-size: responsive-px(18, 30, 320, 768);
+                                        transition: all .4s ease;
+                                        @include screen-sm-min {
+                                            width: 60%;
+                                            font-size: responsive-px(
+                                                18,
+                                                30,
+                                                768,
+                                                1920
+                                            );
+                                        }
+                                        span {
+                                            line-height: 1;
+                                            margin-top: -2px;
+                                        }
+                                        &:hover{
+                                            background-color: $text-color-brown;
+                                            color:$header-bg;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    >img{
+                        max-width: 30%;
+                        margin:0 auto;
+                        margin-bottom: 15px;
+                    }
+                   
+                }
+            }
+        }
+        .speakers {
+            .section-header {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                img{
+                    width: 100%;
+                }
+      
+            }
+        }
+        .what-is-ee {
+            padding: 5%;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            justify-content: center;
+            @include screen-sm-min {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            @include screen-sm-min {
+                padding-bottom: 6%;
+            }
+            .ee-logo {
+                width: 60%;
+                margin-top: 30px;
+                @include screen-sm-min {
+                    margin-bottom: 0;
+                    width: 25%;
+                }
+                img {
+                    width: 100%;
+                }
+            }
+            .ee-explanation {
+                @include screen-sm-min {
+                    width: 70%;
+                }
+                h3 {
+                    font-weight: 800;
+                    color: #a2577b;
+                    font-size: responsive-px(16, 42, 320, 768);
+                    margin-bottom: 20px;
+                    @include screen-sm-min {
+                        font-size: responsive-px(24, 62, 768, 1920);
+                    }
+                }
+                p {
+                    color: #000;
+                    font-weight: 600;
+                    font-size: responsive-px(15, 26, 320, 768);
+                    @include screen-sm-min {
+                        font-size: responsive-px(14, 26, 768, 1920);
+                    }
+                }
+            }
+        }
+        .logos {
+            padding: 10%;
+            text-align: center;
+            background-color: #e8e8f4;
+
+            .speakers-photos {
+                max-width: 80%;
+                margin: 30px auto;
+                @include screen-sm-min {
+                    max-width: 90%;
+                    margin: responsive-px(30, 60, 768, 1920) auto;
+                }
+                .slick-list > div {
+                    @include screen-xlg {
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                }
+                .speaker-photo {
+                    @include screen-sm-min {
+                        width: 90% !important;
+                    }
+                    img {
+                        width: 100%;
+                    }
+                    .speaker-name-speciality {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-direction: column;
+                        margin-top: 15px;
+                        span {
+                            text-align: center;
+                            font-weight: 500;
+                            color: $ginda;
+                            font-size: responsive-px(15, 20, 320, 768);
+                            @include screen-sm-min {
+                                font-size: responsive-px(14, 20, 768, 1920);
+                            }
+                            &:last-child {
+                                font-size: responsive-px(12, 16, 320, 768);
+                                @include screen-sm-min {
+                                    font-size: responsive-px(12, 16, 768, 1920);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .conferencias {
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            padding-top: 2%;
+            padding-bottom: 2%;
+            position: relative;
+            .section-header {
+                img{
+                    width: 100%;
+                }
+            }
+
+            .conferencias-content {
+                padding: 5%;
+                display: flex;
+                align-items: flex-start;
+                justify-content: center;
+                flex-wrap: wrap;
+                >div{
+                    width: 100%;
+                    margin:15px;
+                    @include screen-sm-min{
+                        width: auto;
+                        margin-left: 25px;
+                        margin-right: 25px;
+                    }
+                    &:nth-child(1),&:nth-child(2){
+                        padding: 0 30px;
+                        width: 65%;
+                    }
+                    >span{
+                        text-align: center;
+                        display: block;
+                        &:nth-child(1){
+                            padding:10px 30px;
+                            color:$text-color-brown;
+                            position:relative;
+                            font-weight: 700;
+                            font-size: responsive-px(14,26,320,768);
+                            margin-bottom: 10px;
+                            line-height: 1;
+                            @include screen-sm-min{
+                                
+                                font-size: responsive-px(28,40,768,1920);
+                                padding: 10px responsive-px(15,30,768,1920);
+                            }
+                            &:before{
+                            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+                                content:"";
+                                z-index: -1;
+                                background-color: $header-bg;
+                                transform: skewX(-30deg);
+                                position: absolute;
+                                left:0;
+                                top:0;
+                                height: 100%;
+                                width: 100%;
+                            }
+                        }  
+                        &:nth-child(2){
+                            font-weight: 700;
+                            font-size: responsive-px(12,20,320,768);
+                            @include screen-sm-min{
+                                
+                                font-size: responsive-px(14,28,768,1920);
+                            }
+                        } 
+                    }
+                }
+            }
+        }
+        .casos {
+            padding-top: 5%;
+            padding-bottom: 5%;
+            position: relative;
+            .section-header {
+                img{
+                    width: 100%;
+                    &:nth-child(2){
+                        margin-top: 25px;
+                    }
+                }
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                flex-direction: column;
+            }
+        }
+        .frase-motivacional {
+            background-color: $header-bg;
+            img{
+                width: 100%;
+            }
+            >div:nth-child(2){
+                padding: 2% 0;
+                background-color: #fff;
+                #time-counter2 {
+                    text-align: center;
+                    color: #000;
+                    font-weight: 800;
+                    font-size: responsive-px(14, 28, 320, 768);
+                    @include screen-sm-min {
+                        font-size: responsive-px(16, 30, 768, 1920);
+                    }
+                }
+                a{
+                    margin: 0 auto ;
+                    margin-top: 15px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 30px;
+                    width: 180px;
+                    height: 50px;
+                    background: transparent;
+                    color: $text-color-brown;
+                    border: 2px solid $text-color-brown;
+                    background: transparent;
+                    font-weight: 600;
+                    font-size: responsive-px(18, 30, 320, 768);
+                    transition: all .4s ease;
+                    line-height: 1;
+                    background-color: $background-yellow-2;
+                    @include screen-sm-min {
+                        font-size: responsive-px(
+                            18,
+                            30,
+                            768,
+                            1920
+                        );
+                    }
+                    span {
+                        line-height: 1;
+                        margin-top: -2px;
+                    }
+                    &:hover{
+                        background-color: $text-color-brown;
+                        color:$header-bg;
+                    }
+                
+            }
+            }
+        }
+        .registro {
+            background-color: #fff;
+            padding-top: 5%;
+            padding-bottom: 3%;
+            .register-button {
+                margin-bottom: responsive-px(30, 60, 768, 1920);
+                margin-top: responsive-px(30, 60, 768, 1920);
+                a {
+                    margin: 0 auto;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 30px;
+                    color: #fff;
+                    width: 240px;
+                    height: 60px;
+                    color: #a2577b;
+                    border: 2px solid #a2577b;
+                    background: transparent;
+                    font-weight: 500;
+                    font-size: responsive-px(18, 32, 320, 768);
+                    @include screen-sm-min {
+                        font-size: responsive-px(18, 32, 768, 1920);
+                    }
+                }
+            }
+            #time-counter2 {
+                text-align: center;
+                color: $ginda;
+                font-weight: 800;
+                font-size: responsive-px(14, 28, 320, 768);
+                @include screen-sm-min {
+                    font-size: responsive-px(16, 30, 768, 1920);
+                }
+            }
+        }
+    }
+    footer {
+        position: relative;
+            background-color: $header-bg;
+        >img{
+            width: 100%;
+            display: none;
+            @include screen-sm-min{
+                display: inline;
+            }
+        }
+        >div{
+            
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            @include screen-sm-min {
+                position: absolute;
+                z-index: 2;
+                top:0;
+                left:0;
+                width: 100%;
+                height: 100%;
+                flex-direction: row;
+
+            }
+        }
+        
+        .left-content {
+            padding: 30px 45px;
+            margin-bottom: 30px;
+            position: relative;
+            text-align: center;
+            @include screen-sm-min {
+                width: 50%;
+                margin-bottom: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+            }
+            &:before {
+                content: "";
+                position: absolute;
+                top: 30px;
+                right: 0;
+                height: calc(100% - 60px);
+                width: 5px;
+                background: #f9bd3b;
+                display: none;
+                background: $text-color-brown;
+                border-radius: 3px;
+                @include screen-sm-min {
+                    display: block;
+                }
+            }
+            img {
+                width: 100%;
+            }
+            > div:last-child {
+                margin: 0 auto;
+                margin-right: 0;
+                margin-top: 30px;
+                max-width: 50%;
+            }
+        }
+        .right-content {
+            text-align: center;
+            @include screen-sm-min {
+                width: 50%;
+                display: flex;
+                align-items: center;
+                text-align: left;
+            }
+            > div {
+                width: 100%;
+                img {
+                    max-width: 40%;
+                    margin-left: 30px;
+                }
+            }
+            .speakers-photos {
+                max-width: 80%;
+                margin: 30px auto;
+                @include screen-sm-min {
+                    max-width: 90%;
+                    margin: responsive-px(30, 60, 768, 1920) auto;
+                }
+                .slick-list > div {
+                    @include screen-xlg {
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                }
+                .speaker-photo {
+                    @include screen-sm-min {
+                        width: 90% !important;
+                    }
+                    img {
+                        width: 100%;
+                    }
+                    .speaker-name-speciality {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-direction: column;
+                        margin-top: 15px;
+                        span {
+                            text-align: center;
+                            font-weight: 500;
+                            color: #fff;
+                            font-size: responsive-px(15, 20, 320, 768);
+                            @include screen-sm-min {
+                                font-size: responsive-px(14, 20, 768, 1920);
+                            }
+                            &:last-child {
+                                font-size: responsive-px(12, 16, 320, 768);
+                                @include screen-sm-min {
+                                    font-size: responsive-px(12, 16, 768, 1920);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#expo-emprendedores-spa,
+#app_layout {
+    .register-form {
+        .what-is-ee {
+            padding: 5%;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            justify-content: center;
+            @include screen-sm-min {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            @include screen-sm-min {
+                padding-bottom: 3%;
+            }
+            .ee-logo {
+                display: none;
+            }
+            .ee-explanation {
+                @include screen-sm-min {
+                    width: 100%;
+                }
+                h3 {
+                    font-weight: 800;
+                    color: $ginda;
+                    font-size: responsive-px(14, 32, 320, 768);
+                    margin-bottom: 20px;
+                    @include screen-sm-min {
+                        font-size: responsive-px(14, 32, 768, 1920);
+                    }
+                }
+                p {
+                    color: #000;
+                    font-weight: 600;
+                    font-size: responsive-px(12, 16, 320, 768);
+                    @include screen-sm-min {
+                        font-size: responsive-px(12, 16, 768, 1920);
+                    }
+                }
+            }
+        }
+    }
+}
+
+#app_layout {
+    .login-form {
+        min-height: 40vh;
+    }
+}
+
+#dashboard {
+    .top-right_info {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        .user_info {
+            margin-right: 30px;
+        }
+    }
+}

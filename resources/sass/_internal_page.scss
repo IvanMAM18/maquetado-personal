@@ -1,0 +1,28 @@
+#expo-emprendedores-spa {
+    .main-internal-page {
+        padding: 5%;
+        margin: 0 auto;
+        @include screen-sm-min {
+        }
+        > div.ant-row {
+            @include screen-xs {
+                margin: 0;
+            }
+        }
+        .breadcrumb {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            list-style: none;
+            background-color: #e9ecef;
+            border-radius: 0.25rem;
+            .breadcrumb-item {
+                display: flex;
+            }
+        }
+    }
+}
