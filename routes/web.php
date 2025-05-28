@@ -78,7 +78,7 @@ Route::post('/entrar', [App\Http\Controllers\Auth\LoginController::class, 'login
 
 /*Route::get('/force-login', function() {
     $token = Auth::attempt([
-        'username' => 'Admin',
+        'name' => 'Admin',
         'password' => 'SAlpz.'
     ]);
 

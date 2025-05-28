@@ -1,9 +1,9 @@
 {
     "/js/app.js": "/js/app.js?id=1ca6dda4ba8edca0ccef6abfb6172a99",
-    "/js/ExpoEmprendedores.js": "/js/ExpoEmprendedores.js?id=48227aacc1538d1ce4a7e7999dbd0c9d",
-    "/js/pages/Auth/Login.js": "/js/pages/Auth/Login.js?id=b215ad57c636de8eff0b4e66c27b7308",
-    "/js/pages/Dashboard/Dashboard.js": "/js/pages/Dashboard/Dashboard.js?id=d66baad85790e8f5b0d8d287f47c6a83",
-    "/js/components/layouts/Header.js": "/js/components/layouts/Header.js?id=b35df03f70b3a956426ff9a31017432a",
-    "/js/components/layouts/Footer.js": "/js/components/layouts/Footer.js?id=b7f6291f1587f22c37f0ea244bb7fd5a",
-    "/css/app.css": "/css/app.css?id=347387b48c52a961201fe1b3b1929555"
+    "/js/ExpoEmprendedores.js": "/js/ExpoEmprendedores.js?id=f0175a3e2903ae083e688f24ba3dcb7a",
+    "/js/pages/Dashboard/Dashboard.js": "/js/pages/Dashboard/Dashboard.js?id=3404e81cf54fad50368c54c35fbaecb0",
+    "/js/components/layouts/Header.js": "/js/components/layouts/Header.js?id=0a5e16bc02856da832697ca46dc78aa2",
+    "/js/components/layouts/Footer.js": "/js/components/layouts/Footer.js?id=ece29b0609990a339cbc6fc798733d2e",
+    "/js/pages/Auth/Login.js": "/js/pages/Auth/Login.js?id=7197fd63ecc8c13ea5b6bfcfd52df20f",
+    "/css/app.css": "/css/app.css?id=ad6e49a42347d22b6c4e30aba7e2dfc0"
 }

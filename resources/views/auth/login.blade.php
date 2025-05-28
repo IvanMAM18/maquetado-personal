@@ -2,6 +2,7 @@
 
 @section('content')
 
+
 @if(Auth::user())
     @php
         header("Location: " . URL::to('/dashboard'), true, 302);
@@ -9,11 +10,14 @@
     @endphp
 @endif
 
+
+<div id="login-form-container"></div>
+<h1>---</h1>
 <div class="fluid-container login-form">
     <div class="row justify-content-center"  style="margin:0 auto">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Iniciar Sesión') }}</div>
+                <div class="card-header">{{ __('Iniciar Sesión') }} viejo</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('entrar') }}">
@@ -26,12 +30,12 @@
                         
                             <div class="col-md-6">
                                 <input id="login" type="text"
-                                    class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
-                                    name="login" value="{{ old('username') ?: old('email') }}" required autofocus>
+                                    class="form-control{{ $errors->has('name') || $errors->has('email') ? ' is-invalid' : '' }}"
+                                    name="login" value="{{ old('name') ?: old('email') }}" required autofocus>
                         
-                                @if ($errors->has('username') || $errors->has('email'))
+                                @if ($errors->has('name') || $errors->has('email'))
                                     <span class="invalid-feedback">
-                                        <!--strong>{{ $errors->first('username') ?: $errors->first('email') }}</!--strong-->
+                                        <!--strong>{{ $errors->first('name') ?: $errors->first('email') }}</!--strong-->
                                         <strong>Hubo un error con el nombre de usuario o el correo</strong>
                                     </span>
                                 @endif
@@ -84,4 +88,9 @@
         </div>
     </div>
 </div>
+
 @endsection
+
+@include('includes.scripts')
+<script src="{{ mix('js/components/layouts/Header.js') }}" defer></script>
+<script src="{{ mix('js/pages/Auth/Login.js') }}" defer></script>

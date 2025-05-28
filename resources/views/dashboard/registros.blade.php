@@ -17,7 +17,6 @@
 
 <body class="antialiased">
     <div id="dashboard" class="dashboard-layout">
-        aqui
     </div>
     @include('includes.scripts')
     <script src="{{ asset('js/app.js') }}" defer></script>
