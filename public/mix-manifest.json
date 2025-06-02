@@ -1,9 +1,10 @@
 {
     "/js/app.js": "/js/app.js?id=1ca6dda4ba8edca0ccef6abfb6172a99",
     "/js/ExpoEmprendedores.js": "/js/ExpoEmprendedores.js?id=f0175a3e2903ae083e688f24ba3dcb7a",
-    "/js/pages/Dashboard/Dashboard.js": "/js/pages/Dashboard/Dashboard.js?id=3404e81cf54fad50368c54c35fbaecb0",
+    "/js/pages/Dashboard/Dashboard.js": "/js/pages/Dashboard/Dashboard.js?id=e938b92731096159d57e646fd456ea57",
     "/js/components/layouts/Header.js": "/js/components/layouts/Header.js?id=0a5e16bc02856da832697ca46dc78aa2",
     "/js/components/layouts/Footer.js": "/js/components/layouts/Footer.js?id=ece29b0609990a339cbc6fc798733d2e",
+    "/js/components/MenuBar.js": "/js/components/MenuBar.js?id=eb36cc7051fcfbb968cea3ead486b809",
     "/js/pages/Auth/Login.js": "/js/pages/Auth/Login.js?id=7197fd63ecc8c13ea5b6bfcfd52df20f",
     "/css/app.css": "/css/app.css?id=ad6e49a42347d22b6c4e30aba7e2dfc0"
 }

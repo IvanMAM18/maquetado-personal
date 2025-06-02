@@ -51,8 +51,8 @@ Route::get('/dashboard/registros/foro', [App\Http\Controllers\EmprendedoresParti
 
 // Ruta dashboard principal (redirige a expo por defecto)
 Route::get('/dashboard', function () {
-    return redirect('/dashboard/registros/foro');
-});
+    return view('dashboard');
+})->middleware('auth');
 
 
 Route::get('/user', [App\Http\Controllers\UserController::class, 'self']);
