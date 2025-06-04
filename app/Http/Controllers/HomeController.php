@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $auth = Auth::user();
+        if ($auth->rol_id == 3) {
+            return view('dashboard_admin.users');
+        } else {
+            return view('dashboard_admin.home');
+        }
     }
 }

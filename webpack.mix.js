@@ -12,12 +12,20 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .js('resources/js/ExpoEmprendedores.js', 'public/js')
-    .js('resources/js/pages/Dashboard/Dashboard.js', 'public/js/pages/Dashboard/Dashboard.js')
+
+    .js('resources/js/dashboard_admin/pages/dashboardHome.js', 'public/js/dashboard_admin/pages')
+    .js('resources/js/dashboard_admin/pages/embarcaciones.js', 'public/js/dashboard_admin/pages')
+    .js('resources/js/dashboard_admin/pages/perfil.js', 'public/js/dashboard_admin/pages')
+    .js('resources/js/dashboard_admin/pages/usuarios.js', 'public/js/dashboard_admin/pages')
+
+    .js(
+        "resources/js/dashboard_admin/home_reports.js",
+        "public/js/dashboard_admin"
+    )
     .js('resources/js/components/layouts/Header.js', 'public/js/components/layouts/Header.js')
     .js('resources/js/components/layouts/Footer.js', 'public/js/components/layouts/Footer.js')
+
     .js('resources/js/components/MenuBar.js', 'public/js/components/MenuBar.js')
-    .js('resources/js/pages/Auth/Login.js', 'public/js/pages/Auth')
     .sass('resources/sass/app.scss', 'public/css')
     .sourceMaps()
     .version();

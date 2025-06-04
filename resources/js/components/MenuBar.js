@@ -1,28 +1,43 @@
 
-
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
-export default function MenuBar({ userData }) {
-  const [isOpen, setIsOpen] = useState(true);
-  const [activeItem, setActiveItem] = useState("Inicio");
+export default function MenuBar({ userData, onToggle  }) {
+    const [isOpen, setIsOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Estado inicial basado en la ruta actual
+  const [activeItem, setActiveItem] = useState(() => {
+    const path = location.pathname;
+    if (path.includes('embarcaciones')) return 'Embarcación';
+    if (path.includes('usuarios')) return 'Usuarios';
+    if (path.includes('perfil')) return 'Perfil';
+    return 'Inicio';
+  });
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) {
-        setIsOpen(true);
-      }
+      if (window.innerWidth >= 768) setIsOpen(true);
     };
 
     handleResize();
     window.addEventListener('resize', handleResize);
-    
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Sincronizar con cambios de ruta
+  useEffect(() => {
+    const path = location.pathname;
+    if (path.includes('embarcaciones')) setActiveItem('Embarcación');
+    else if (path.includes('usuarios')) setActiveItem('Usuarios');
+    else if (path.includes('perfil')) setActiveItem('Perfil');
+    else setActiveItem('Inicio');
+  }, [location.pathname]);
 
   const handleItemClick = (itemName, href, e) => {
     e.preventDefault();
@@ -30,7 +45,21 @@ export default function MenuBar({ userData }) {
     navigate(href);
   };
 
-  const menuItems = [
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post('/logout');
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.href = '/entrar';
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+      window.location.href = '/entrar';
+    }
+  };
+
+  const mainItems = [
     { 
       name: "Inicio", 
       icon: (
@@ -45,10 +74,16 @@ export default function MenuBar({ userData }) {
       name: "Embarcación", 
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">  
-          <circle cx="12" cy="12" r="10" />  <circle cx="12" cy="12" r="4" />  <line x1="4.93" y1="4.93" x2="9.17" y2="9.17" />  <line x1="14.83" y1="14.83" x2="19.07" y2="19.07" />  <line x1="14.83" y1="9.17" x2="19.07" y2="4.93" />  <line x1="14.83" y1="9.17" x2="18.36" y2="5.64" />  <line x1="4.93" y1="19.07" x2="9.17" y2="14.83" />
+          <circle cx="12" cy="12" r="10" />  
+          <circle cx="12" cy="12" r="4" />  
+          <line x1="4.93" y1="4.93" x2="9.17" y2="9.17" />  
+          <line x1="14.83" y1="14.83" x2="19.07" y2="19.07" />  
+          <line x1="14.83" y1="9.17" x2="19.07" y2="4.93" />  
+          <line x1="14.83" y1="9.17" x2="18.36" y2="5.64" />  
+          <line x1="4.93" y1="19.07" x2="9.17" y2="14.83" />
         </svg>
       ),
-      href: "/registros/expo"
+      href: "/embarcaciones"
     },
     { 
       name: "Usuarios", 
@@ -57,8 +92,11 @@ export default function MenuBar({ userData }) {
           <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
         </svg>
       ),
-      href: "/registros/foro"
-    },
+      href: "/usuarios"
+    }
+  ];
+
+  const profileItems = [
     { 
       name: "Perfil", 
       icon: (
@@ -79,20 +117,23 @@ export default function MenuBar({ userData }) {
         </svg>
       ),
       href: "/logout",
-    },
+      onClick: handleLogout
+    }
   ];
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    const newState = !isOpen;
+    setIsOpen(newState);
+    if (onToggle) onToggle(!newState); // Notifica al Dashboard
   };
 
   const CloseIcon = () => (
     <svg width="22" height="22" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none">  
       <path stroke="none" d="M0 0h24v24H0z"/>  
-      <line x1="20" y1="6" x2="9" y2="6" />  
-      <line x1="20" y1="12" x2="13" y2="12" />  
-      <line x1="20" y1="18" x2="9" y2="18" />  
-      <path d="M4 8l4 4l-4 4" />
+        <line x1="20" y1="6" x2="13" y2="6" />  
+        <line x1="20" y1="12" x2="11" y2="12" />  
+        <line x1="20" y1="18" x2="13" y2="18" />  
+      <path d="M8 8l-4 4l4 4" />
     </svg>
   );
 
@@ -106,14 +147,11 @@ export default function MenuBar({ userData }) {
   );
 
   const CustomIcon = () => (
-    <svg width="40" height="40" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none">
-      <path stroke="none" d="M0 0h24v24H0z"/>  
-      <path d="M12 9v12m-8 -8a8 8 0 0 0 16 0m1 0h-2m-14 0h-2" />  
-      <circle cx="12" cy="6" r="3" />
+    <svg width="30" height="30" viewBox="0 0 24 24" strokeWidth="3" stroke="currentColor" fill="none">  
+      <circle cx="12" cy="5" r="3" />  <line x1="12" y1="22" x2="12" y2="8" />  <path d="M5 12H2a10 10 0 0 0 20 0h-3" />
     </svg>
   );
 
-  // Estilos mejorados sin conflictos
   const getItemStyle = (isActive, isMenuOpen) => {
     const baseStyle = {
       cursor: 'pointer',
@@ -255,7 +293,7 @@ export default function MenuBar({ userData }) {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            marginBottom: '20px'
+            marginBottom: '8px'
           }}>
             <li
               onClick={toggleMenu}
@@ -283,14 +321,14 @@ export default function MenuBar({ userData }) {
                     zIndex: 1000,
                     boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
                   }}>
-                    Cerrar menú
+                    Abrir menú
                   </div>
                 )}
               </span>
               {isOpen && <span>Cerrar menú</span>}
             </li>
 
-            {menuItems.slice(0, 3).map((item) => (
+            {mainItems.map((item) => (
               <li
                 key={item.name}
                 onClick={(e) => handleItemClick(item.name, item.href, e)}
@@ -300,7 +338,10 @@ export default function MenuBar({ userData }) {
               >
                 <a 
                   href={item.href}
-                  onClick={(e) => handleItemClick(item.name, item.href, e)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleItemClick(item.name, item.href, e);
+                  }}
                   style={{ 
                     textDecoration: 'none', 
                     display: 'flex', 
@@ -340,7 +381,7 @@ export default function MenuBar({ userData }) {
           </ul>
         </div>
 
-        <div style={{ width: '100%' }}>
+        <div style={{ width: '100%', marginTop: 'auto' }}>
           <ul style={{ 
             listStyle: 'none', 
             padding: 0,
@@ -349,17 +390,20 @@ export default function MenuBar({ userData }) {
             flexDirection: 'column',
             alignItems: 'center'
           }}>
-            {menuItems.slice(3).map((item) => (
+            {profileItems.map((item) => (
               <li
                 key={item.name}
-                onClick={(e) => handleItemClick(item.name, item.href, e)}
+                onClick={item.onClick || ((e) => handleItemClick(item.name, item.href, e))}
                 style={getItemStyle(activeItem === item.name, isOpen)}
                 onMouseEnter={() => !isOpen && setHoveredItem(item.name)}
                 onMouseLeave={() => setHoveredItem(null)}
               >
                 <a 
                   href={item.href}
-                  onClick={(e) => handleItemClick(item.name, item.href, e)}
+                  onClick={item.onClick || ((e) => {
+                    e.preventDefault();
+                    handleItemClick(item.name, item.href, e);
+                  })}
                   style={{ 
                     textDecoration: 'none', 
                     display: 'flex', 
