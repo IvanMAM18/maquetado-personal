@@ -16,22 +16,22 @@ return new class extends Migration
             $table->foreignId('embarcacion_id')->constrained('embarcaciones')->onDelete('cascade');
             
             // Documentos principales
-            $table->string('permiso_turismo_nautico', 100)->nullable()->comment('Número de permiso de turismo náutico');
-            $table->string('permiso_pesca_deportiva', 100)->nullable()->comment('Número de permiso de pesca deportiva');
-            $table->string('permiso_balandra_conanp', 100)->nullable()->comment('Permiso de balandra CONANP');
-            $table->string('permiso_espiritu_santo_conanp', 100)->nullable()->comment('Permiso para Espíritu Santo CONANP');
-            $table->string('permiso_tiburon_ballena_dgvs', 100)->nullable()->comment('Permiso para tiburón ballena DGVS');
+            $table->string('permiso_turismo_nautico')->nullable();
+            $table->string('permiso_pesca_deportiva')->nullable();
+            $table->string('permiso_balandra_conanp')->nullable();
+            $table->string('permiso_espiritu_santo_conanp')->nullable();
+            $table->string('permiso_tiburon_ballena_dgvs')->nullable();
             
             // Registros
-            $table->string('registro_nacional_turismo', 100)->nullable()->comment('Número de registro nacional de turismo');
-            $table->string('registro_nacional_embarcaciones', 100)->nullable()->comment('Número de registro nacional de embarcaciones');
+            $table->string('registro_nacional_turismo')->nullable();
+            $table->string('registro_nacional_embarcaciones')->nullable();
             
             // Documentación legal
-            $table->string('constancia_residencia_acta_nacimiento', 100)->nullable()->comment('Constancia de residencia o acta de nacimiento');
-            $table->string('carta_verdad_propia_oficina', 100)->nullable()->comment('Carta de verdad de propiedad de oficina');
-            $table->string('carta_verdad_trabajado_zona_malecon', 100)->nullable()->comment('Carta de verdad de trabajo en zona malecón');
-            $table->string('carta_no_concesion_playa_zofemat', 100)->nullable()->comment('Carta de no concesión de playa ZOFEMAT');
-            $table->string('permiso_uso_muelle_fiscal_api', 100)->nullable()->comment('Permiso de uso de muelle fiscal API');
+            $table->string('constancia_residencia_acta_nacimiento')->nullable();
+            $table->string('carta_verdad_propia_oficina')->nullable();
+            $table->string('carta_verdad_trabajado_zona_malecon')->nullable();
+            $table->string('carta_no_concesion_playa_zofemat')->nullable();
+            $table->string('permiso_uso_muelle_fiscal_api')->nullable();
             
             $table->softDeletes();
             $table->timestamps();

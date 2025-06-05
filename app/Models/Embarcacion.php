@@ -26,7 +26,9 @@ class Embarcacion extends Model
         'servicio_ofrecido',
         'vigencia_certificado_seguridad',
         'numero_poliza_seguro',
-        'telefono_siniestros'
+        'telefono_siniestros',
+        'carrusel',
+        'foto_embarcacion'
     ];
 
     protected $casts = [

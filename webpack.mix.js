@@ -22,6 +22,7 @@ mix.js('resources/js/app.js', 'public/js')
         "resources/js/dashboard_admin/home_reports.js",
         "public/js/dashboard_admin"
     )
+    
     .js('resources/js/components/layouts/Header.js', 'public/js/components/layouts/Header.js')
     .js('resources/js/components/layouts/Footer.js', 'public/js/components/layouts/Footer.js')
 

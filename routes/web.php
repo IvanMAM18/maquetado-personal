@@ -31,7 +31,19 @@ Route::middleware(['auth','roles'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/home/{any}', [App\Http\Controllers\HomeController::class, 'index'])
          ->where('any', '.*');
-    Route::get('/embarcaciones', [App\Http\Controllers\EmbarcacionController::class, 'indexAdmin'])->name('embarcaciones');
+    
+    // Rutas para embarcaciones
+
+    
+    Route::prefix('/embarcaciones')->group(function() {
+        Route::get('/data', [App\Http\Controllers\EmbarcacionController::class, 'getDataAll']);
+        Route::get('/find/{id}', [App\Http\Controllers\EmbarcacionController::class, 'find']);
+        Route::post('/registro', [App\Http\Controllers\EmbarcacionController::class, 'registroEmbarcacion']);
+        Route::put('/update/{id}', [App\Http\Controllers\EmbarcacionController::class, 'update']);
+        Route::delete('/delete/{id}', [App\Http\Controllers\EmbarcacionController::class, 'destroy']);
+        Route::get('/csv', [App\Http\Controllers\EmbarcacionController::class, 'obtenerCSVRegistrados']);
+        Route::get('/excel', [App\Http\Controllers\EmbarcacionController::class, 'createXLS']);
+    });
 });
 
 Route::get('/user', [App\Http\Controllers\UserController::class, 'self']);
