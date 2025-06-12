@@ -15,6 +15,8 @@ mix.js('resources/js/app.js', 'public/js')
 
     .js('resources/js/dashboard_admin/pages/dashboardHome.js', 'public/js/dashboard_admin/pages')
     .js('resources/js/dashboard_admin/pages/embarcaciones.js', 'public/js/dashboard_admin/pages')
+    .js('resources/js/dashboard_admin/pages/embarcacionesCarruselA.js', 'public/js/dashboard_admin/pages')
+    .js('resources/js/dashboard_admin/pages/embarcacionesCarruselB.js', 'public/js/dashboard_admin/pages')
     .js('resources/js/dashboard_admin/pages/perfil.js', 'public/js/dashboard_admin/pages')
     .js('resources/js/dashboard_admin/pages/usuarios.js', 'public/js/dashboard_admin/pages')
 

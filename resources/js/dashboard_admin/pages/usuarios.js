@@ -5,7 +5,7 @@ import axios from 'axios';
 export default function DashboardHome() {
 
     return (
-        <div style={{ width: '100%', padding: '20px', background: 'red' }}>
+        <div style={{ width: '100%', padding: '20px' }}>
             <h1>Panel de usuarios</h1>
             <p style={{ textAlign: 'center', color: '#888' }}>
                 Selecciona la pestaña para ver las estadísticas de cada evento

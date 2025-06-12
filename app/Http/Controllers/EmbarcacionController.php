@@ -45,104 +45,86 @@ class EmbarcacionController extends Controller
     }
     
     public function registroEmbarcacion(Request $request)
-{
-    // Validación de los datos de entrada
-    $validator = Validator::make($request->all(), [
-        'numero_embarcacion' => 'required|unique:embarcaciones',
-        'nombre_embarcacion' => 'required',
-        'numero_permiso_nautico' => 'required|unique:embarcaciones',
-        'nombre_permisionario' => 'required',
-        'nombre_representante' => 'nullable',
-        'capacidad_pasajeros' => 'required|integer|min:1',
-        'turno_salida' => 'required',
-        'hora_salida' => 'required',
-        'telefono_contacto' => 'required',
-        'email_contacto' => 'required|email',
-        'servicio_ofrecido' => 'required',
-        'vigencia_certificado_seguridad' => 'required|date',
-        'numero_poliza_seguro' => 'required',
-        'telefono_siniestros' => 'required',
-        'foto_embarcacion' => 'required|file|mimes:jpeg,png,jpg|max:2048',
-        'carrusel' => 'required|in:A,B',
-        
-        // Documentación
-        'permiso_turismo_nautico' => 'nullable|file|mimes:pdf|max:2048',
-        'permiso_pesca_deportiva' => 'nullable|file|mimes:pdf|max:2048',
-        'permiso_balandra_conanp' => 'nullable|file|mimes:pdf|max:2048',
-        'permiso_espiritu_santo_conanp' => 'nullable|file|mimes:pdf|max:2048',
-        'permiso_tiburon_ballena_dgvs' => 'nullable|file|mimes:pdf|max:2048',
-        'registro_nacional_turismo' => 'nullable|file|mimes:pdf|max:2048',
-        'registro_nacional_embarcaciones' => 'nullable|file|mimes:pdf|max:2048',
-        'constancia_residencia_acta_nacimiento' => 'nullable|file|mimes:pdf|max:2048',
-        'carta_verdad_propia_oficina' => 'nullable|file|mimes:pdf|max:2048',
-        'carta_verdad_trabajado_zona_malecon' => 'nullable|file|mimes:pdf|max:2048',
-        'carta_no_concesion_playa_zofemat' => 'nullable|file|mimes:pdf|max:2048',
-        'permiso_uso_muelle_fiscal_api' => 'nullable|file|mimes:pdf|max:2048'
-    ]);
-    
-    if ($validator->fails()) {
-        return response()->json($validator->errors()->toJson(), 400);
-    }
-    
-    try {
-        // Crear carpetas base si no existen
-        if (!Storage::disk('public')->exists('embarcaciones')) {
-            Storage::disk('public')->makeDirectory('embarcaciones');
-        }
-        if (!Storage::disk('public')->exists('embarcaciones/carrusel_A')) {
-            Storage::disk('public')->makeDirectory('embarcaciones/carrusel_A');
-        }
-        if (!Storage::disk('public')->exists('embarcaciones/carrusel_B')) {
-            Storage::disk('public')->makeDirectory('embarcaciones/carrusel_B');
-        }
-
-        // Crear registro en la base de datos
-        $embarcacion = Embarcacion::create([
-            'numero_embarcacion' => $request->numero_embarcacion,
-            'nombre_embarcacion' => $request->nombre_embarcacion,
-            'numero_permiso_nautico' => $request->numero_permiso_nautico,
-            'nombre_permisionario' => $request->nombre_permisionario,
-            'nombre_representante' => $request->nombre_representante,
-            'capacidad_pasajeros' => $request->capacidad_pasajeros,
-            'turno_salida' => $request->turno_salida,
-            'hora_salida' => $request->hora_salida,
-            'telefono_contacto' => $request->telefono_contacto,
-            'email_contacto' => $request->email_contacto,
-            'servicio_ofrecido' => $request->servicio_ofrecido,
-            'vigencia_certificado_seguridad' => $request->vigencia_certificado_seguridad,
-            'numero_poliza_seguro' => $request->numero_poliza_seguro,
-            'telefono_siniestros' => $request->telefono_siniestros,
-            'carrusel' => $request->carrusel,
-            'foto_embarcacion' => null
+    {
+        // Validación de los datos de entrada
+        $validator = Validator::make($request->all(), [
+            'numero_embarcacion' => 'required|unique:embarcaciones',
+            'nombre_embarcacion' => 'required',
+            'numero_permiso_nautico' => 'required|unique:embarcaciones',
+            'nombre_permisionario' => 'required',
+            'nombre_representante' => 'nullable',
+            'capacidad_pasajeros' => 'required|integer|min:1',
+            'turno_salida' => 'required',
+            'hora_salida' => 'required',
+            'telefono_contacto' => 'required',
+            'email_contacto' => 'required|email',
+            'servicio_ofrecido' => 'required',
+            'vigencia_certificado_seguridad' => 'required|date',
+            'numero_poliza_seguro' => 'required',
+            'telefono_siniestros' => 'required',
+            'foto_embarcacion' => 'required|file|mimes:jpeg,png,jpg|max:2048',
+            'carrusel' => 'required|in:A,B',
+            
+            // Documentación
+            'permiso_turismo_nautico' => 'nullable|file|mimes:pdf|max:2048',
+            'permiso_pesca_deportiva' => 'nullable|file|mimes:pdf|max:2048',
+            'permiso_balandra_conanp' => 'nullable|file|mimes:pdf|max:2048',
+            'permiso_espiritu_santo_conanp' => 'nullable|file|mimes:pdf|max:2048',
+            'permiso_tiburon_ballena_dgvs' => 'nullable|file|mimes:pdf|max:2048',
+            'registro_nacional_turismo' => 'nullable|file|mimes:pdf|max:2048',
+            'registro_nacional_embarcaciones' => 'nullable|file|mimes:pdf|max:2048',
+            'constancia_residencia_acta_nacimiento' => 'nullable|file|mimes:pdf|max:2048',
+            'carta_verdad_propia_oficina' => 'nullable|file|mimes:pdf|max:2048',
+            'carta_verdad_trabajado_zona_malecon' => 'nullable|file|mimes:pdf|max:2048',
+            'carta_no_concesion_playa_zofemat' => 'nullable|file|mimes:pdf|max:2048',
+            'permiso_uso_muelle_fiscal_api' => 'nullable|file|mimes:pdf|max:2048'
         ]);
-
-        // Configurar rutas de almacenamiento
-        $carpetaCarrusel = $request->carrusel === 'A' ? 'carrusel_A' : 'carrusel_B';
-        $carpetaEmbarcacion = 'embarcacion_' . $embarcacion->id;
-        $rutaBase = "embarcaciones/{$carpetaCarrusel}/{$carpetaEmbarcacion}";
         
-        // Crear carpetas para la embarcación
-        Storage::disk('public')->makeDirectory($rutaBase);
-        Storage::disk('public')->makeDirectory("{$rutaBase}/documentos");
-
-        // Procesar foto de la embarcación
-        if ($request->hasFile('foto_embarcacion')) {
-            $foto = $request->file('foto_embarcacion');
-            $extension = $foto->extension();
-            $nombreArchivo = 'foto_embarcacion.' . $extension;
-            
-            $path = $foto->storeAs(
-                $rutaBase, 
-                $nombreArchivo, 
-                'public'
-            );
-            
-            $embarcacion->update(['foto_embarcacion' => Storage::url($path)]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors()->toJson(), 400);
         }
+        
+        try {
+            // Crear registro en la base de datos primero (sin archivos)
+            $embarcacionData = $request->except(array_merge(['foto_embarcacion'], $this->getDocumentFields()));
+            $embarcacion = Embarcacion::create($embarcacionData);
+            
+            // Procesar archivos
+            $this->procesarArchivos($request, $embarcacion);
+            
+            return response()->json([
+                'message' => 'Embarcación registrada exitosamente!',
+                'embarcacion' => $embarcacion->load('documentacion')
+            ], 201);
 
-        // Procesar documentos
-        $documentosData = ['embarcacion_id' => $embarcacion->id];
-        $documentFields = [
+        } catch (\Exception $e) {
+            // En caso de error, eliminar la embarcación creada si existe
+            if (isset($embarcacion)) {
+                $embarcacion->delete();
+            }
+            
+            return response()->json([
+                'message' => 'Error al registrar la embarcación',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Métodos auxiliares para manejo de archivos
+    private function crearEstructuraCarpetas()
+    {
+        $carpetasBase = ['embarcaciones', 'embarcaciones/carrusel_A', 'embarcaciones/carrusel_B'];
+        
+        foreach ($carpetasBase as $carpeta) {
+            if (!Storage::disk('public')->exists($carpeta)) {
+                Storage::disk('public')->makeDirectory($carpeta);
+            }
+        }
+    }
+
+    private function getDocumentFields()
+    {
+        return [
             'permiso_turismo_nautico',
             'permiso_pesca_deportiva',
             'permiso_balandra_conanp',
@@ -156,63 +138,53 @@ class EmbarcacionController extends Controller
             'carta_no_concesion_playa_zofemat',
             'permiso_uso_muelle_fiscal_api'
         ];
+    }
 
-        foreach ($documentFields as $field) {
+    private function procesarArchivos(Request $request, Embarcacion $embarcacion)
+    {
+        $carpetaCarrusel = $embarcacion->carrusel === 'A' ? 'carrusel_A' : 'carrusel_B';
+        $carpetaEmbarcacion = 'embarcacion_' . $embarcacion->id;
+        $rutaBase = "embarcaciones/{$carpetaCarrusel}/{$carpetaEmbarcacion}";
+        
+        // Crear estructura de carpetas si no existe
+        if (!Storage::disk('public')->exists($rutaBase)) {
+            Storage::disk('public')->makeDirectory($rutaBase);
+            Storage::disk('public')->makeDirectory("{$rutaBase}/documentos");
+        }
+
+        // Procesar foto principal
+        if ($request->hasFile('foto_embarcacion')) {
+            $this->guardarArchivo($request->file('foto_embarcacion'), $rutaBase, 'foto_embarcacion', $embarcacion);
+        }
+
+        // Procesar documentos
+        $documentosData = ['embarcacion_id' => $embarcacion->id];
+        foreach ($this->getDocumentFields() as $field) {
             if ($request->hasFile($field)) {
-                $documento = $request->file($field);
-                $extension = $documento->extension();
-                $nombreArchivo = $field . '.' . $extension;
-                
-                $path = $documento->storeAs(
-                    "{$rutaBase}/documentos", 
-                    $nombreArchivo, 
-                    'public'
-                );
-                
+                $path = $this->guardarArchivo($request->file($field), "{$rutaBase}/documentos", $field);
                 $documentosData[$field] = Storage::url($path);
             }
         }
 
         // Crear registro de documentación
         DocumentacionEmbarcacion::create($documentosData);
-        
-        // Enviar notificación por correo
-        try {
-            Mail::to($embarcacion->email_contacto)->send(new RegisterNotification([
-                'id' => $embarcacion->id
-            ]));
-        } catch (\Exception $mailException) {
-            \Log::error('Error al enviar correo: ' . $mailException->getMessage());
-        }
-        
-        return response()->json([
-            'message' => 'Embarcación registrada exitosamente!',
-            'embarcacion' => $embarcacion->load('documentacion'),
-            'ruta_archivos' => $rutaBase
-        ], 201);
-
-    } catch (\Exception $e) {
-        // En caso de error, eliminar lo creado para mantener consistencia
-        if (isset($embarcacion)) {
-            try {
-                if (isset($rutaBase) && Storage::disk('public')->exists($rutaBase)) {
-                    Storage::disk('public')->deleteDirectory($rutaBase);
-                }
-                $embarcacion->delete();
-            } catch (\Exception $cleanupException) {
-                \Log::error('Error en limpieza: ' . $cleanupException->getMessage());
-            }
-        }
-        
-        \Log::error('Error en registroEmbarcacion: ' . $e->getMessage());
-        
-        return response()->json([
-            'message' => 'Error al registrar la embarcación',
-            'error' => $e->getMessage(),
-            'trace' => env('APP_DEBUG') ? $e->getTraceAsString() : null
-        ], 500);
     }
-}
+
+    private function guardarArchivo($archivo, $ruta, $nombreBase, $model = null)
+    {
+        // Generar nombre único para el archivo
+        $nombreArchivo = $nombreBase . '_' . Str::random(10) . '.' . $archivo->extension();
+        
+        // Guardar el archivo en el almacenamiento público
+        $path = $archivo->storeAs($ruta, $nombreArchivo, 'public');
+        
+        // Actualizar modelo si es necesario (para la foto principal)
+        if ($model && $nombreBase === 'foto_embarcacion') {
+            $model->update(['foto_embarcacion' => Storage::url($path)]);
+        }
+        
+        return $path;
+    }
     
     public function all()
     {
@@ -220,16 +192,16 @@ class EmbarcacionController extends Controller
     }
 
     public function getDataAll()
-{
-    try {
-        $embarcaciones = Embarcacion::with('documentacion')->get();
-        return response()->json($embarcaciones);
-    } catch (\Exception $e) {
-        return response()->json([
-            'error' => 'Error al obtener las embarcaciones'
-        ], 500);
+    {
+        try {
+            $embarcaciones = Embarcacion::with('documentacion')->get();
+            return response()->json($embarcaciones);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error al obtener las embarcaciones'
+            ], 500);
+        }
     }
-}
 
     public function find($id)
     {
@@ -240,13 +212,7 @@ class EmbarcacionController extends Controller
         }
 
         return response()->json([
-            'embarcacion' => [
-                'id' => $embarcacion->id,
-                'numero_embarcacion' => $embarcacion->numero_embarcacion,
-                'nombre_embarcacion' => $embarcacion->nombre_embarcacion,
-                // ... todos los campos principales
-                'documentacion' => $embarcacion->documentacion
-            ]
+            'embarcacion' => $embarcacion
         ]);
     }
     
@@ -254,12 +220,8 @@ class EmbarcacionController extends Controller
     {
         $embarcaciones = Embarcacion::with('documentacion')->orderBy('created_at')->get();
         
-        $filename = "embarcaciones-registradas.csv";
-        $filepath = public_path("files/" . $filename);
-        
-        if (!File::exists(public_path("files"))) {
-            File::makeDirectory(public_path("files"));
-        }
+        $filename = "embarcaciones-registradas-" . date('Y-m-d') . ".csv";
+        $filepath = storage_path("app/public/{$filename}");
         
         $handle = fopen($filepath, 'w');
         
@@ -291,41 +253,38 @@ class EmbarcacionController extends Controller
                 $embarcacion->nombre_representante,
                 $embarcacion->capacidad_pasajeros,
                 $embarcacion->turno_salida,
-                $embarcacion->hora_salida->format('H:i'),
+                $embarcacion->hora_salida,
                 $embarcacion->telefono_contacto,
                 $embarcacion->email_contacto,
                 $embarcacion->servicio_ofrecido,
-                $embarcacion->vigencia_certificado_seguridad->format('Y-m-d'),
+                $embarcacion->vigencia_certificado_seguridad,
                 $embarcacion->numero_poliza_seguro,
                 $embarcacion->telefono_siniestros,
                 $embarcacion->carrusel,
                 $embarcacion->foto_embarcacion,
-                $embarcacion->created_at->format('Y-m-d H:i:s'),
+                $embarcacion->created_at,
                 // Documentación
-                $doc->permiso_turismo_nautico ?? '',
-                $doc->permiso_pesca_deportiva ?? '',
-                $doc->permiso_balandra_conanp ?? '',
-                $doc->permiso_espiritu_santo_conanp ?? '',
-                $doc->permiso_tiburon_ballena_dgvs ?? '',
-                $doc->registro_nacional_turismo ?? '',
-                $doc->registro_nacional_embarcaciones ?? '',
-                $doc->constancia_residencia_acta_nacimiento ?? '',
-                $doc->carta_verdad_propia_oficina ?? '',
-                $doc->carta_verdad_trabajado_zona_malecon ?? '',
-                $doc->carta_no_concesion_playa_zofemat ?? '',
-                $doc->permiso_uso_muelle_fiscal_api ?? ''
+                $doc->permiso_turismo_nautico ?? 'No subido',
+                $doc->permiso_pesca_deportiva ?? 'No subido',
+                $doc->permiso_balandra_conanp ?? 'No subido',
+                $doc->permiso_espiritu_santo_conanp ?? 'No subido',
+                $doc->permiso_tiburon_ballena_dgvs ?? 'No subido',
+                $doc->registro_nacional_turismo ?? 'No subido',
+                $doc->registro_nacional_embarcaciones ?? 'No subido',
+                $doc->constancia_residencia_acta_nacimiento ?? 'No subido',
+                $doc->carta_verdad_propia_oficina ?? 'No subido',
+                $doc->carta_verdad_trabajado_zona_malecon ?? 'No subido',
+                $doc->carta_no_concesion_playa_zofemat ?? 'No subido',
+                $doc->permiso_uso_muelle_fiscal_api ?? 'No subido'
             ]);
         }
         
         fclose($handle);
         
-        return Response::download($filepath, $filename, [
+        return response()->download($filepath, $filename, [
             'Content-Type' => 'text/csv; charset=utf-8',
             'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
-            'Content-Disposition' => 'attachment; filename=' . $filename,
-            'Expires' => '0',
-            'Pragma' => 'public',
-        ]);
+        ])->deleteFileAfterSend(true);
     }
 
     public function createXLS()
@@ -350,119 +309,192 @@ class EmbarcacionController extends Controller
         ];
 
         // Encabezados principales
-        $sheet->setCellValue('A1', 'ID')->getStyle('A1')->applyFromArray($headerStyle);
-        $sheet->setCellValue('B1', 'Número Embarcación')->getStyle('B1')->applyFromArray($headerStyle);
-        // ... agregar todos los encabezados principales
-
-        // Encabezados de documentación
-        $docStartCol = 18; // Columna R
-        $docHeaders = [
-            'Permiso Turismo Náutico', 'Permiso Pesca Deportiva', 'Permiso Balandra CONANP',
-            'Permiso Espíritu Santo CONANP', 'Permiso Tiburón Ballena DGVS',
-            'Registro Nacional Turismo', 'Registro Nacional Embarcaciones',
-            'Constancia Residencia/Acta Nacimiento', 'Carta Verdad Propia Oficina',
-            'Carta Verdad Trabajado Zona Malecón', 'Carta No Concesión Playa ZOFEMAT',
-            'Permiso Uso Muelle Fiscal API'
+        $headers = [
+            'A' => 'ID',
+            'B' => 'Número Embarcación',
+            'C' => 'Nombre Embarcación',
+            'D' => 'Permiso Náutico',
+            'E' => 'Permisionario',
+            'F' => 'Representante',
+            'G' => 'Capacidad',
+            'H' => 'Turno',
+            'I' => 'Hora Salida',
+            'J' => 'Teléfono Contacto',
+            'K' => 'Email Contacto',
+            'L' => 'Servicio',
+            'M' => 'Vigencia Certificado',
+            'N' => 'Póliza Seguro',
+            'O' => 'Teléfono Siniestros',
+            'P' => 'Carrusel',
+            'Q' => 'Foto Embarcación',
+            'R' => 'Fecha Registro'
         ];
 
-        foreach ($docHeaders as $index => $header) {
-            $col = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($docStartCol + $index);
+        // Encabezados de documentación
+        $docHeaders = [
+            'S' => 'Permiso Turismo Náutico',
+            'T' => 'Permiso Pesca Deportiva',
+            'U' => 'Permiso Balandra CONANP',
+            'V' => 'Permiso Espíritu Santo CONANP',
+            'W' => 'Permiso Tiburón Ballena DGVS',
+            'X' => 'Registro Nacional Turismo',
+            'Y' => 'Registro Nacional Embarcaciones',
+            'Z' => 'Constancia Residencia/Acta Nacimiento',
+            'AA' => 'Carta Verdad Propia Oficina',
+            'AB' => 'Carta Verdad Trabajado Zona Malecón',
+            'AC' => 'Carta No Concesión Playa ZOFEMAT',
+            'AD' => 'Permiso Uso Muelle Fiscal API'
+        ];
+
+        // Combinar todos los encabezados
+        $allHeaders = array_merge($headers, $docHeaders);
+
+        foreach ($allHeaders as $col => $header) {
             $sheet->setCellValue($col.'1', $header)->getStyle($col.'1')->applyFromArray($headerStyle);
         }
 
         // Llenar datos
         foreach ($embarcaciones as $row => $embarcacion) {
             $doc = $embarcacion->documentacion;
-            $dataRow = $row + 2; // Empieza en fila 2
+            $dataRow = $row + 2;
 
+            // Datos principales
             $sheet->setCellValue('A'.$dataRow, $embarcacion->id);
             $sheet->setCellValue('B'.$dataRow, $embarcacion->numero_embarcacion);
-            // ... agregar todos los datos principales
+            $sheet->setCellValue('C'.$dataRow, $embarcacion->nombre_embarcacion);
+            $sheet->setCellValue('D'.$dataRow, $embarcacion->numero_permiso_nautico);
+            $sheet->setCellValue('E'.$dataRow, $embarcacion->nombre_permisionario);
+            $sheet->setCellValue('F'.$dataRow, $embarcacion->nombre_representante ?? 'N/A');
+            $sheet->setCellValue('G'.$dataRow, $embarcacion->capacidad_pasajeros);
+            $sheet->setCellValue('H'.$dataRow, $embarcacion->turno_salida);
+            $sheet->setCellValue('I'.$dataRow, $embarcacion->hora_salida);
+            $sheet->setCellValue('J'.$dataRow, $embarcacion->telefono_contacto);
+            $sheet->setCellValue('K'.$dataRow, $embarcacion->email_contacto);
+            $sheet->setCellValue('L'.$dataRow, $embarcacion->servicio_ofrecido);
+            $sheet->setCellValue('M'.$dataRow, $embarcacion->vigencia_certificado_seguridad);
+            $sheet->setCellValue('N'.$dataRow, $embarcacion->numero_poliza_seguro);
+            $sheet->setCellValue('O'.$dataRow, $embarcacion->telefono_siniestros);
+            $sheet->setCellValue('P'.$dataRow, $embarcacion->carrusel);
+            $sheet->setCellValue('Q'.$dataRow, $embarcacion->foto_embarcacion ? 'Subida' : 'No subida');
+            $sheet->setCellValue('R'.$dataRow, $embarcacion->created_at);
 
             // Datos de documentación
-            $sheet->setCellValue('R'.$dataRow, $doc->permiso_turismo_nautico ?? '');
-            $sheet->setCellValue('S'.$dataRow, $doc->permiso_pesca_deportiva ?? '');
-            // ... agregar todos los documentos
+            $sheet->setCellValue('S'.$dataRow, $doc->permiso_turismo_nautico ? 'Subido' : 'No subido');
+            $sheet->setCellValue('T'.$dataRow, $doc->permiso_pesca_deportiva ? 'Subido' : 'No subido');
+            $sheet->setCellValue('U'.$dataRow, $doc->permiso_balandra_conanp ? 'Subido' : 'No subido');
+            $sheet->setCellValue('V'.$dataRow, $doc->permiso_espiritu_santo_conanp ? 'Subido' : 'No subido');
+            $sheet->setCellValue('W'.$dataRow, $doc->permiso_tiburon_ballena_dgvs ? 'Subido' : 'No subido');
+            $sheet->setCellValue('X'.$dataRow, $doc->registro_nacional_turismo ? 'Subido' : 'No subido');
+            $sheet->setCellValue('Y'.$dataRow, $doc->registro_nacional_embarcaciones ? 'Subido' : 'No subido');
+            $sheet->setCellValue('Z'.$dataRow, $doc->constancia_residencia_acta_nacimiento ? 'Subido' : 'No subido');
+            $sheet->setCellValue('AA'.$dataRow, $doc->carta_verdad_propia_oficina ? 'Subido' : 'No subido');
+            $sheet->setCellValue('AB'.$dataRow, $doc->carta_verdad_trabajado_zona_malecon ? 'Subido' : 'No subido');
+            $sheet->setCellValue('AC'.$dataRow, $doc->carta_no_concesion_playa_zofemat ? 'Subido' : 'No subido');
+            $sheet->setCellValue('AD'.$dataRow, $doc->permiso_uso_muelle_fiscal_api ? 'Subido' : 'No subido');
         }
 
         // Autoajustar columnas
-        foreach (range('A', \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($docStartCol + count($docHeaders) - 1)) as $col) {
+        foreach (array_keys($allHeaders) as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
         $writer = new Xlsx($spreadsheet);
 
+        $filename = 'embarcaciones-registradas-'.now()->format('Y-m-d_H-i').'.xlsx';
+
         return response()->streamDownload(
             function () use ($writer) {
                 $writer->save('php://output');
             },
-            'embarcaciones-registradas-'.now()->format('Y-m-d_H-i').'.xlsx',
+            $filename,
             ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
         );
     }
     
     public function update(Request $request, $id)
-{
-    $embarcacion = Embarcacion::with('documentacion')->findOrFail($id);
-    
-    $validator = Validator::make($request->all(), [
-        'numero_embarcacion' => 'required|unique:embarcaciones,numero_embarcacion,'.$id,
-        'nombre_embarcacion' => 'required',
-        'numero_permiso_nautico' => 'required|unique:embarcaciones,numero_permiso_nautico,'.$id,
-        'nombre_permisionario' => 'required',
-        'nombre_representante' => 'nullable',
-        'capacidad_pasajeros' => 'required|integer|min:1',
-        'turno_salida' => 'required',
-        'hora_salida' => 'required',
-        'telefono_contacto' => 'required',
-        'email_contacto' => 'required|email',
-        'servicio_ofrecido' => 'required',
-        'vigencia_certificado_seguridad' => 'required|date',
-        'numero_poliza_seguro' => 'required',
-        'telefono_siniestros' => 'required',
-        'carrusel' => 'required|in:A,B',
-        'foto_embarcacion' => 'nullable|file|mimes:jpeg,png,jpg|max:2048',
+    {
+        $embarcacion = Embarcacion::with('documentacion')->findOrFail($id);
         
-        // Documentación
-        'permiso_turismo_nautico' => 'nullable|file|mimes:pdf|max:2048',
-        'permiso_pesca_deportiva' => 'nullable|file|mimes:pdf|max:2048',
-        'permiso_balandra_conanp' => 'nullable|file|mimes:pdf|max:2048',
-        'permiso_espiritu_santo_conanp' => 'nullable|file|mimes:pdf|max:2048',
-        'permiso_tiburon_ballena_dgvs' => 'nullable|file|mimes:pdf|max:2048',
-        'registro_nacional_turismo' => 'nullable|file|mimes:pdf|max:2048',
-        'registro_nacional_embarcaciones' => 'nullable|file|mimes:pdf|max:2048',
-        'constancia_residencia_acta_nacimiento' => 'nullable|file|mimes:pdf|max:2048',
-        'carta_verdad_propia_oficina' => 'nullable|file|mimes:pdf|max:2048',
-        'carta_verdad_trabajado_zona_malecon' => 'nullable|file|mimes:pdf|max:2048',
-        'carta_no_concesion_playa_zofemat' => 'nullable|file|mimes:pdf|max:2048',
-        'permiso_uso_muelle_fiscal_api' => 'nullable|file|mimes:pdf|max:2048'
-    ]);
-    
-    if ($validator->fails()) {
-        return response()->json($validator->errors()->toJson(), 400);
-    }
-    
-    try {
-        // Actualizar datos básicos
-        $embarcacion->update($request->only([
-            'numero_embarcacion',
-            'nombre_embarcacion',
-            'numero_permiso_nautico',
-            'nombre_permisionario',
-            'nombre_representante',
-            'capacidad_pasajeros',
-            'turno_salida',
-            'hora_salida',
-            'telefono_contacto',
-            'email_contacto',
-            'servicio_ofrecido',
-            'vigencia_certificado_seguridad',
-            'numero_poliza_seguro',
-            'telefono_siniestros',
-            'carrusel'
-        ]));
+        $validator = Validator::make($request->all(), [
+            'numero_embarcacion' => 'required|unique:embarcaciones,numero_embarcacion,'.$id,
+            'nombre_embarcacion' => 'required',
+            'numero_permiso_nautico' => 'required|unique:embarcaciones,numero_permiso_nautico,'.$id,
+            'nombre_permisionario' => 'required',
+            'nombre_representante' => 'nullable',
+            'capacidad_pasajeros' => 'required|integer|min:1',
+            'turno_salida' => 'required',
+            'hora_salida' => 'required',
+            'telefono_contacto' => 'required',
+            'email_contacto' => 'required|email',
+            'servicio_ofrecido' => 'required',
+            'vigencia_certificado_seguridad' => 'required|date',
+            'numero_poliza_seguro' => 'required',
+            'telefono_siniestros' => 'required',
+            'carrusel' => 'required|in:A,B',
+            'foto_embarcacion' => 'nullable|file|mimes:jpeg,png,jpg|max:2048',
+            
+            // Documentación
+            'permiso_turismo_nautico' => 'nullable|file|mimes:pdf|max:2048',
+            'permiso_pesca_deportiva' => 'nullable|file|mimes:pdf|max:2048',
+            'permiso_balandra_conanp' => 'nullable|file|mimes:pdf|max:2048',
+            'permiso_espiritu_santo_conanp' => 'nullable|file|mimes:pdf|max:2048',
+            'permiso_tiburon_ballena_dgvs' => 'nullable|file|mimes:pdf|max:2048',
+            'registro_nacional_turismo' => 'nullable|file|mimes:pdf|max:2048',
+            'registro_nacional_embarcaciones' => 'nullable|file|mimes:pdf|max:2048',
+            'constancia_residencia_acta_nacimiento' => 'nullable|file|mimes:pdf|max:2048',
+            'carta_verdad_propia_oficina' => 'nullable|file|mimes:pdf|max:2048',
+            'carta_verdad_trabajado_zona_malecon' => 'nullable|file|mimes:pdf|max:2048',
+            'carta_no_concesion_playa_zofemat' => 'nullable|file|mimes:pdf|max:2048',
+            'permiso_uso_muelle_fiscal_api' => 'nullable|file|mimes:pdf|max:2048'
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+        
+        try {
+            // Actualizar datos básicos
+            $embarcacion->update($request->only([
+                'numero_embarcacion',
+                'nombre_embarcacion',
+                'numero_permiso_nautico',
+                'nombre_permisionario',
+                'nombre_representante',
+                'capacidad_pasajeros',
+                'turno_salida',
+                'hora_salida',
+                'telefono_contacto',
+                'email_contacto',
+                'servicio_ofrecido',
+                'vigencia_certificado_seguridad',
+                'numero_poliza_seguro',
+                'telefono_siniestros',
+                'carrusel'
+            ]));
 
-        // Actualizar foto si se proporciona
+            // Procesar archivos
+            $this->procesarArchivosParaActualizacion($request, $embarcacion);
+            
+            return response()->json([
+                'message' => 'Embarcación actualizada exitosamente!',
+                'embarcacion' => $embarcacion->load('documentacion')
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al actualizar la embarcación',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    private function procesarArchivosParaActualizacion(Request $request, Embarcacion $embarcacion)
+    {
+        $carpetaCarrusel = $embarcacion->carrusel === 'A' ? 'carrusel_A' : 'carrusel_B';
+        $carpetaEmbarcacion = 'embarcacion_' . $embarcacion->id;
+        $rutaBase = "embarcaciones/{$carpetaCarrusel}/{$carpetaEmbarcacion}";
+        
+        // Procesar foto principal si se proporciona
         if ($request->hasFile('foto_embarcacion')) {
             // Eliminar foto anterior si existe
             if ($embarcacion->foto_embarcacion) {
@@ -471,35 +503,18 @@ class EmbarcacionController extends Controller
             }
 
             $foto = $request->file('foto_embarcacion');
-            $carpetaCarrusel = $request->carrusel === 'A' ? 'carrusel_A' : 'carrusel_B';
-            $nombreCarpeta = 'embarcacion_' . $embarcacion->id; // Usamos ID en lugar del nombre
             $path = $foto->storeAs(
-                "embarcaciones/{$carpetaCarrusel}/{$nombreCarpeta}", 
-                'foto_embarcacion.' . $foto->extension(), 
+                $rutaBase, 
+                'foto_embarcacion_' . Str::random(10) . '.' . $foto->extension(), 
                 'public'
             );
             $embarcacion->foto_embarcacion = Storage::url($path);
             $embarcacion->save();
         }
 
-        // Actualizar documentos
+        // Procesar documentos
         $documentosData = [];
-        $documentFields = [
-            'permiso_turismo_nautico',
-            'permiso_pesca_deportiva',
-            'permiso_balandra_conanp',
-            'permiso_espiritu_santo_conanp',
-            'permiso_tiburon_ballena_dgvs',
-            'registro_nacional_turismo',
-            'registro_nacional_embarcaciones',
-            'constancia_residencia_acta_nacimiento',
-            'carta_verdad_propia_oficina',
-            'carta_verdad_trabajado_zona_malecon',
-            'carta_no_concesion_playa_zofemat',
-            'permiso_uso_muelle_fiscal_api'
-        ];
-
-        foreach ($documentFields as $field) {
+        foreach ($this->getDocumentFields() as $field) {
             if ($request->hasFile($field)) {
                 // Eliminar documento anterior si existe
                 if ($embarcacion->documentacion && $embarcacion->documentacion->$field) {
@@ -508,11 +523,9 @@ class EmbarcacionController extends Controller
                 }
 
                 $documento = $request->file($field);
-                $carpetaCarrusel = $embarcacion->carrusel === 'A' ? 'carrusel_A' : 'carrusel_B';
-                $nombreCarpeta = 'embarcacion_' . $embarcacion->id; // Usamos ID en lugar del nombre
                 $path = $documento->storeAs(
-                    "embarcaciones/{$carpetaCarrusel}/{$nombreCarpeta}/documentos", 
-                    $field . '.' . $documento->extension(), 
+                    "{$rutaBase}/documentos", 
+                    $field . '_' . Str::random(10) . '.' . $documento->extension(), 
                     'public'
                 );
                 $documentosData[$field] = Storage::url($path);
@@ -520,90 +533,65 @@ class EmbarcacionController extends Controller
         }
 
         // Actualizar documentación
-        if ($embarcacion->documentacion) {
+        if ($embarcacion->documentacion && !empty($documentosData)) {
             $embarcacion->documentacion->update($documentosData);
-        } else {
+        } elseif (!empty($documentosData)) {
             $documentosData['embarcacion_id'] = $embarcacion->id;
             DocumentacionEmbarcacion::create($documentosData);
         }
+    }
+
+    public function destroy($id)
+    {
+        $embarcacion = Embarcacion::with('documentacion')->findOrFail($id);
         
-        return response()->json([
-            'message' => 'Embarcación actualizada exitosamente!',
-            'embarcacion' => $embarcacion->load('documentacion')
-        ]);
+        try {
+            // Eliminar archivos de almacenamiento
+            if ($embarcacion->foto_embarcacion) {
+                $fotoPath = str_replace('/storage', '', $embarcacion->foto_embarcacion);
+                Storage::disk('public')->delete($fotoPath);
+            }
 
-    } catch (\Exception $e) {
-        return response()->json([
-            'message' => 'Error al actualizar la embarcación',
-            'error' => $e->getMessage()
-        ], 500);
-    }
-}
+            // Eliminar documentos si existen
+            if ($embarcacion->documentacion) {
+                $documentFields = $this->getDocumentFields();
 
-public function destroy($id)
-{
-    $embarcacion = Embarcacion::with('documentacion')->findOrFail($id);
-    
-    try {
-        // Eliminar archivos de almacenamiento
-        if ($embarcacion->foto_embarcacion) {
-            $fotoPath = str_replace('/storage', '', $embarcacion->foto_embarcacion);
-            Storage::disk('public')->delete($fotoPath);
-        }
-
-        // Eliminar documentos si existen
-        if ($embarcacion->documentacion) {
-            $documentFields = [
-                'permiso_turismo_nautico',
-                'permiso_pesca_deportiva',
-                'permiso_balandra_conanp',
-                'permiso_espiritu_santo_conanp',
-                'permiso_tiburon_ballena_dgvs',
-                'registro_nacional_turismo',
-                'registro_nacional_embarcaciones',
-                'constancia_residencia_acta_nacimiento',
-                'carta_verdad_propia_oficina',
-                'carta_verdad_trabajado_zona_malecon',
-                'carta_no_concesion_playa_zofemat',
-                'permiso_uso_muelle_fiscal_api'
-            ];
-
-            foreach ($documentFields as $field) {
-                if ($embarcacion->documentacion->$field) {
-                    $docPath = str_replace('/storage', '', $embarcacion->documentacion->$field);
-                    Storage::disk('public')->delete($docPath);
+                foreach ($documentFields as $field) {
+                    if ($embarcacion->documentacion->$field) {
+                        $docPath = str_replace('/storage', '', $embarcacion->documentacion->$field);
+                        Storage::disk('public')->delete($docPath);
+                    }
                 }
+
+                // Eliminar carpeta de documentos
+                $carpetaCarrusel = $embarcacion->carrusel === 'A' ? 'carrusel_A' : 'carrusel_B';
+                $nombreCarpeta = 'embarcacion_' . $embarcacion->id;
+                $documentosPath = "embarcaciones/{$carpetaCarrusel}/{$nombreCarpeta}/documentos";
+                if (Storage::disk('public')->exists($documentosPath)) {
+                    Storage::disk('public')->deleteDirectory($documentosPath);
+                }
+
+                // Eliminar carpeta principal
+                $carpetaPrincipal = "embarcaciones/{$carpetaCarrusel}/{$nombreCarpeta}";
+                if (Storage::disk('public')->exists($carpetaPrincipal)) {
+                    Storage::disk('public')->deleteDirectory($carpetaPrincipal);
+                }
+
+                $embarcacion->documentacion->delete();
             }
 
-            // Eliminar carpeta de documentos
-            $carpetaCarrusel = $embarcacion->carrusel === 'A' ? 'carrusel_A' : 'carrusel_B';
-            $nombreCarpeta = 'embarcacion_' . $embarcacion->id; // Usamos ID en lugar del nombre
-            $documentosPath = "embarcaciones/{$carpetaCarrusel}/{$nombreCarpeta}/documentos";
-            if (Storage::disk('public')->exists($documentosPath)) {
-                Storage::disk('public')->deleteDirectory($documentosPath);
-            }
+            // Eliminar la embarcación
+            $embarcacion->delete();
 
-            // Eliminar carpeta principal
-            $carpetaPrincipal = "embarcaciones/{$carpetaCarrusel}/{$nombreCarpeta}";
-            if (Storage::disk('public')->exists($carpetaPrincipal)) {
-                Storage::disk('public')->deleteDirectory($carpetaPrincipal);
-            }
+            return response()->json([
+                'message' => 'Embarcación eliminada exitosamente!'
+            ]);
 
-            $embarcacion->documentacion->delete();
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al eliminar la embarcación',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        // Eliminar la embarcación
-        $embarcacion->delete();
-
-        return response()->json([
-            'message' => 'Embarcación eliminada exitosamente!'
-        ]);
-
-    } catch (\Exception $e) {
-        return response()->json([
-            'message' => 'Error al eliminar la embarcación',
-            'error' => $e->getMessage()
-        ], 500);
     }
-}
 }

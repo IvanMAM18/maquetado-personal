@@ -1,12 +1,14 @@
 {
     "/js/app.js": "/js/app.js?id=1ca6dda4ba8edca0ccef6abfb6172a99",
-    "/js/dashboard_admin/pages/dashboardHome.js": "/js/dashboard_admin/pages/dashboardHome.js?id=6fa417ea0442071a6ad8930f5561f0e6",
-    "/js/dashboard_admin/pages/embarcaciones.js": "/js/dashboard_admin/pages/embarcaciones.js?id=a22bb0f52263f37186c9fd49d838b32b",
-    "/js/dashboard_admin/pages/perfil.js": "/js/dashboard_admin/pages/perfil.js?id=cab7036f8d474fa44e9ca68ad1babfc0",
-    "/js/dashboard_admin/pages/usuarios.js": "/js/dashboard_admin/pages/usuarios.js?id=3b32dfc4f038dc5d925838c3c79259dc",
-    "/js/dashboard_admin/home_reports.js": "/js/dashboard_admin/home_reports.js?id=097ada161d8b3ac7ee3d9aaa1312aa50",
-    "/js/components/layouts/Header.js": "/js/components/layouts/Header.js?id=0a5e16bc02856da832697ca46dc78aa2",
-    "/js/components/layouts/Footer.js": "/js/components/layouts/Footer.js?id=ece29b0609990a339cbc6fc798733d2e",
-    "/js/components/MenuBar.js": "/js/components/MenuBar.js?id=2066ae53d85ce62af1bde390ab965b47",
-    "/css/app.css": "/css/app.css?id=ad6e49a42347d22b6c4e30aba7e2dfc0"
+    "/js/dashboard_admin/pages/dashboardHome.js": "/js/dashboard_admin/pages/dashboardHome.js?id=97e46fbf2e6be0361892b76ecc72713d",
+    "/js/dashboard_admin/pages/embarcaciones.js": "/js/dashboard_admin/pages/embarcaciones.js?id=e53b2abf12fbc33dff1a4cbd1d2d435e",
+    "/js/dashboard_admin/pages/embarcacionesCarruselA.js": "/js/dashboard_admin/pages/embarcacionesCarruselA.js?id=5035d5586dd05af0a092889d4fd526f8",
+    "/js/dashboard_admin/pages/embarcacionesCarruselB.js": "/js/dashboard_admin/pages/embarcacionesCarruselB.js?id=cfea9e8b51ff00964dbbafe438255924",
+    "/js/dashboard_admin/pages/perfil.js": "/js/dashboard_admin/pages/perfil.js?id=86f416ad5f63a29890cc005651b3b9dd",
+    "/js/dashboard_admin/pages/usuarios.js": "/js/dashboard_admin/pages/usuarios.js?id=ee9489338df2ca39246537fc3d6cc42d",
+    "/js/dashboard_admin/home_reports.js": "/js/dashboard_admin/home_reports.js?id=3587915eee76b88d34e49a42f4a811c4",
+    "/js/components/layouts/Header.js": "/js/components/layouts/Header.js?id=1f441f2d86189a370ef2db3eabbca074",
+    "/js/components/layouts/Footer.js": "/js/components/layouts/Footer.js?id=dbb45b07c2b603fa12ac0b6c851b2b2a",
+    "/js/components/MenuBar.js": "/js/components/MenuBar.js?id=fe6c92207d7116a7a40fe62ce4a04900",
+    "/css/app.css": "/css/app.css?id=347387b48c52a961201fe1b3b1929555"
 }

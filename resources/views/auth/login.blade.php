@@ -2,8 +2,6 @@
 
 @section('content')
 
-
-
 <div class="login-container">
     <div class="login-card">
         <!-- Contenedor del SVG de fondo -->
@@ -94,7 +92,6 @@
 </div>
 
 <script>
-    
     function togglePasswordVisibility() {
         const passwordInput = document.getElementById('password');
         const eyeIcon = document.querySelector('.eye-icon');
@@ -115,11 +112,12 @@
         --primary-color: #168284;
         --primary-dark: #0e5e60;
         --error-color: #e74c3c;
-        --text-color: #333;
-        --light-gray: #f5f5f5;
-        --border-color: #ddd;
-        --svg-color: #168284;
-        --icon-color: #168284;
+        --text-color: #fff; /* Cambiado a blanco */
+        --light-gray: rgba(255, 255, 255, 0.1);
+        --border-color: rgba(255, 255, 255, 0.55);
+        --svg-color: #fff; /* Cambiado a blanco */
+        --icon-color: #fff; /* Cambiado a blanco */
+        --card-bg: rgb(255, 255, 255);
     }
     
     .login-container {
@@ -130,10 +128,10 @@
         padding: 20px;
         position: relative;
         overflow: hidden;
-        background-color: white;
+        background-color: #168284; /* Fondo azul */
     }
 
-    /* Nuevo fondo con iconos dispersos */
+    /* Fondo con iconos dispersos en blanco */
     .login-container::before {
         content: "";
         position: absolute;
@@ -141,23 +139,24 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' stroke-width='1.5' stroke='%23168284' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 9v12m-8 -8a8 8 0 0 0 16 0m1 0h-2m-14 0h-2' /%3E%3Ccircle cx='12' cy='6' r='3' /%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' stroke-width='1.5' stroke='%23ffffff' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 9v12m-8 -8a8 8 0 0 0 16 0m1 0h-2m-14 0h-2' /%3E%3Ccircle cx='12' cy='6' r='3' /%3E%3C/svg%3E");
         background-size: 20px 20px;
         background-repeat: repeat;
-        opacity: 0.1; /* Opacidad muy baja para los iconos de fondo */
+        opacity: 0.2;
         z-index: 0;
     }
     
     .login-card {
         position: relative;
-        z-index: 1; /* Asegura que el contenido esté por encima del fondo */
+        z-index: 1;
         width: 100%;
         max-width: 500px;
-        background-color: white;
+        background-color: var(--card-bg);
         border-radius: 10px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
         overflow: hidden;
         transition: transform 0.3s ease;
+        backdrop-filter: blur(5px);
     }
 
     /* Contenedor del SVG de fondo */
@@ -177,9 +176,9 @@
     .background-svg {
         width: 100%;
         height: 100%;
-        color: var(--svg-color);
+        color: var(--primary-color);
         stroke-width: 3px;
-        opacity: 0.1; /* Más visible pero sutil */
+        opacity: 0.2;
         animation: pulse 15s infinite alternate;
     }
     
@@ -190,7 +189,7 @@
             transform: rotate(0deg);
         }
         100% {
-            opacity: 0.2;
+            opacity: 0.3;
             transform: rotate(5deg);
         }
     }
@@ -208,12 +207,12 @@
     .login-header h2 {
         margin: 0 0 5px;
         font-size: 1.8rem;
-        color: var(--text-color);
+        color: var(--primary-color); /* Color azul para el título */
     }
     
     .login-description {
         margin: 0;
-        color: #666;
+        color: var(--primary-color); /* Color azul para la descripción */
         font-size: 0.95rem;
     }
     
@@ -229,7 +228,7 @@
     .form-group label {
         display: block;
         margin-bottom: 0.5rem;
-        color: var(--text-color);
+        color: var(--primary-color); /* Color azul para las etiquetas */
         font-weight: 500;
     }
     
@@ -251,21 +250,10 @@
         align-items: center;
     }
     
-    .input-icon {
+    .input-icon, .toggle-password {
         position: absolute;
         left: 15px;
-        color: var(--icon-color);
-        display: flex;
-        align-items: center;
-        height: 100%;
-        z-index: 2;
-    }
-    
-    .toggle-password {
-        position: absolute;
-        left: 15px; /* Cambiado a izquierda */
-        cursor: pointer;
-        color: var(--icon-color);
+        color: var(--primary-color); /* Color azul para los iconos */
         display: flex;
         align-items: center;
         height: 100%;
@@ -280,27 +268,20 @@
         border-radius: 5px;
         font-size: 1rem;
         transition: all 0.3s ease;
-        background-color: transparent; /* Transparente por defecto */
-        position: relative;
-        z-index: 1;
+        background-color: rgba(255, 255, 255, 0.6);
+        color: #333;
     }
     
     .form-input:focus {
         border-color: var(--primary-color);
         outline: none;
         box-shadow: 0 0 0 3px rgba(22, 130, 132, 0.2);
-        background-color: white; /* Fondo blanco al enfocar */
+        background-color: white;
     }
     
-    /* Estilo especial para el input de contraseña */
-    .form-group:nth-child(2) .form-input {
-        padding-left: 45px;
-    }
-    
-    /* Mantener el resto de estilos igual */
     .form-input.is-invalid {
         border-color: var(--error-color);
-        background-color: rgba(231, 76, 60, 0.1); /* Fondo rojo claro para inputs inválidos */
+        background-color: rgba(231, 76, 60, 0.1);
     }
     
     .error-message {
@@ -327,6 +308,10 @@
     .form-checkbox {
         margin-right: 0.5rem;
         accent-color: var(--primary-color);
+    }
+    
+    .form-check-label {
+        color: var(--primary-color); /* Color azul para el texto */
     }
     
     .forgot-password {
@@ -360,25 +345,21 @@
     .icon {
         width: 20px;
         height: 20px;
-        color: var(--icon-color);
+        color: var(--primary-color); /* Color azul para los iconos */
     }
     
     /* Responsive */
     @media (max-width: 576px) {
         .login-card {
-            background: transparent;
-            border-radius: 0;
-            box-shadow: none;
-            border: none; 
+            background: rgba(255, 255, 255, 0.95);
+            /* border-radius: 0;
+            box-shadow: none; */
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
         }
         
         .login-container {
             padding: 0;
-            background: white;
-        }
-        
-        .background-svg {
-            stroke-width: 3px; /* Un poco más fino en móviles */
         }
         
         .form-options {

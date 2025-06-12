@@ -31,18 +31,43 @@ Route::middleware(['auth','roles'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/home/{any}', [App\Http\Controllers\HomeController::class, 'index'])
          ->where('any', '.*');
-    
-    // Rutas para embarcaciones
 
-    
+    // Embarcaciones
+// Embarcaciones
+Route::get('/embarcaciones', [App\Http\Controllers\EjemploEmbarcacionController::class, 'index']);
+Route::get('/embarcaciones-welcome', [App\Http\Controllers\EjemploEmbarcacionController::class, 'indexWelcome']);
+Route::get('/embarcaciones-admin', [App\Http\Controllers\EjemploEmbarcacionController::class, 'indexAdmin']);
+Route::get('/embarcaciones-dashboard', [App\Http\Controllers\EjemploEmbarcacionController::class, 'indexDashboard']);
+Route::get('/embarcaciones-data', [App\Http\Controllers\EjemploEmbarcacionController::class, 'getDataAll']);
+Route::get('/embarcaciones-excel', [App\Http\Controllers\EjemploEmbarcacionController::class, 'createXLS']);
+Route::post('/embarcaciones-store', [App\Http\Controllers\EjemploEmbarcacionController::class, 'store']);
+Route::put('/embarcaciones-update/{id}', [App\Http\Controllers\EjemploEmbarcacionController::class, 'update']);
+Route::delete('/embarcaciones-delete/{id}', [App\Http\Controllers\EjemploEmbarcacionController::class, 'destroy']);
+Route::post('/cambiar-estado-embarcacion/{id}', [App\Http\Controllers\EjemploEmbarcacionController::class, 'sendStatusEmail']);
+
+
+    // Rutas para embarcaciones
     Route::prefix('/embarcaciones')->group(function() {
-        Route::get('/data', [App\Http\Controllers\EmbarcacionController::class, 'getDataAll']);
-        Route::get('/find/{id}', [App\Http\Controllers\EmbarcacionController::class, 'find']);
-        Route::post('/registro', [App\Http\Controllers\EmbarcacionController::class, 'registroEmbarcacion']);
-        Route::put('/update/{id}', [App\Http\Controllers\EmbarcacionController::class, 'update']);
-        Route::delete('/delete/{id}', [App\Http\Controllers\EmbarcacionController::class, 'destroy']);
-        Route::get('/csv', [App\Http\Controllers\EmbarcacionController::class, 'obtenerCSVRegistrados']);
-        Route::get('/excel', [App\Http\Controllers\EmbarcacionController::class, 'createXLS']);
+        // Vistas
+        // Route::get('/', [App\Http\Controllers\EmbarcacionController::class, 'index']);
+        // Route::get('/admin', [App\Http\Controllers\EmbarcacionController::class, 'indexAdmin']);
+        
+        // Operaciones CRUD
+        Route::get('/', [App\Http\Controllers\EmbarcacionController::class, 'all']); // Listar todas
+        Route::get('/data', [App\Http\Controllers\EmbarcacionController::class, 'getDataAll']); // Datos completos con relaciones
+        Route::get('/{id}', [App\Http\Controllers\EmbarcacionController::class, 'find']); // Obtener una específica
+        Route::post('/registro', [App\Http\Controllers\EmbarcacionController::class, 'registroEmbarcacion']); // Crear
+        Route::put('/{id}', [App\Http\Controllers\EmbarcacionController::class, 'update']); // Actualizar
+        Route::delete('/{id}', [App\Http\Controllers\EmbarcacionController::class, 'destroy']); // Eliminar
+        
+        // Exportaciones
+        Route::get('/export/csv', [App\Http\Controllers\EmbarcacionController::class, 'obtenerCSVRegistrados']);
+        Route::get('/export/excel', [App\Http\Controllers\EmbarcacionController::class, 'createXLS']);
+        
+        // Servicios (si necesitas exponerlos)
+        Route::get('/servicios/listado', function() {
+            return response()->json(App\Http\Controllers\EmbarcacionController::$servicios);
+        });
     });
 });
 
