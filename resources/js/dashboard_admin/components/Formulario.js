@@ -1,524 +1,384 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-const Formulario = ({ initialValues, onSubmit, onCancel, servicios }) => {
-    const [formValues, setFormValues] = useState({
-        numero_embarcacion: '',
-        nombre_embarcacion: '',
-        numero_permiso_nautico: '',
-        nombre_permisionario: '',
-        nombre_representante: '',
-        capacidad_pasajeros: '',
-        turno_salida: '',
-        hora_salida: '',
-        telefono_contacto: '',
-        email_contacto: '',
-        servicio_ofrecido: '',
-        vigencia_certificado_seguridad: '',
-        numero_poliza_seguro: '',
-        telefono_siniestros: '',
-        carrusel: 'A'
-    });
-    
-    const [files, setFiles] = useState({});
-    const [documentos, setDocumentos] = useState({});
+const Formulario = ({ initialValues, onSubmit, onCancel, servicios, darkMode }) => {
+    const [formData, setFormData] = useState(initialValues);
 
-    // Establecer valores iniciales si estamos editando
-    useEffect(() => {
-        if (initialValues) {
-            setFormValues({
-                numero_embarcacion: initialValues.numero_embarcacion,
-                nombre_embarcacion: initialValues.nombre_embarcacion,
-                numero_permiso_nautico: initialValues.numero_permiso_nautico,
-                nombre_permisionario: initialValues.nombre_permisionario,
-                nombre_representante: initialValues.nombre_representante || '',
-                capacidad_pasajeros: initialValues.capacidad_pasajeros,
-                turno_salida: initialValues.turno_salida,
-                hora_salida: initialValues.hora_salida,
-                telefono_contacto: initialValues.telefono_contacto,
-                email_contacto: initialValues.email_contacto,
-                servicio_ofrecido: initialValues.servicio_ofrecido,
-                vigencia_certificado_seguridad: initialValues.vigencia_certificado_seguridad.split(' ')[0], // Solo la fecha
-                numero_poliza_seguro: initialValues.numero_poliza_seguro,
-                telefono_siniestros: initialValues.telefono_siniestros,
-                carrusel: initialValues.carrusel
-            });
-
-            if (initialValues.documentacion) {
-                setDocumentos(initialValues.documentacion);
-            }
-        }
-    }, [initialValues]);
-
-    const handleChange = (e) => {
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormValues(prev => ({ ...prev, [name]: value }));
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
     };
 
     const handleFileChange = (e) => {
-        const { name, files: fileList } = e.target;
-        if (fileList.length > 0) {
-            setFiles(prev => ({ ...prev, [name]: fileList[0] }));
+        setFormData(prev => ({
+            ...prev,
+            foto_embarcacion: e.target.files[0]
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        const data = new FormData();
+        
+        // Asegúrate de incluir todos los campos requeridos
+        const fields = [
+            'numero_embarcacion', 'nombre_embarcacion', 'numero_permiso_nautico',
+            'nombre_permisionario', 'nombre_representante', 'capacidad_pasajeros',
+            'turno_salida', 'hora_salida', 'telefono_contacto', 'email_contacto',
+            'servicio_ofrecido', 'vigencia_certificado_seguridad', 'numero_poliza_seguro',
+            'telefono_siniestros', 'carrusel'
+        ];
+    
+        fields.forEach(field => {
+            if (formData[field] !== null && formData[field] !== undefined) {
+                data.append(field, formData[field]);
+            }
+        });
+    
+        // Manejo especial para la foto
+        if (formData.foto_embarcacion instanceof File) {
+            data.append('foto_embarcacion', formData.foto_embarcacion);
+        } else if (typeof formData.foto_embarcacion === 'string' && formData.id) {
+            // Si es una edición y no se cambió la foto, no enviar nada
+        }
+    
+        // Incluir el ID si es una edición
+        if (formData.id) {
+            data.append('_method', 'PUT'); // Importante para Laravel
+        }
+    
+        try {
+            await onSubmit(data);
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            // Puedes mostrar un mensaje de error al usuario aquí
         }
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onSubmit(formValues, files);
-    };
-
-    // Función para mostrar si un documento está subido (en modo edición)
-    const tieneDocumento = (nombreDocumento) => {
-        return documentos && documentos[nombreDocumento] && documentos[nombreDocumento] !== 'No subido';
+    // Estilos comunes
+    const styles = {
+        modalOverlay: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000
+        },
+        modalContent: {
+            backgroundColor: darkMode ? '#2d3748' : 'white',
+            padding: '20px',
+            borderRadius: '8px',
+            width: '80%',
+            maxWidth: '600px',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            color: darkMode ? 'white' : 'inherit'
+        },
+        input: {
+            width: '100%',
+            padding: '8px',
+            borderRadius: '4px',
+            border: '1px solid #ddd',
+            marginBottom: '15px',
+            backgroundColor: darkMode ? '#4a5568' : 'white',
+            color: darkMode ? 'white' : 'inherit'
+        },
+        button: {
+            padding: '8px 15px',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            marginLeft: '10px'
+        },
+        formGrid: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+            gap: '15px'
+        },
+        formGroup: {
+            marginBottom: '15px'
+        },
+        label: {
+            display: 'block',
+            marginBottom: '5px',
+            fontWeight: '500',
+            color: darkMode ? '#e2e8f0' : '#666'
+        },
+        buttonGroup: {
+            display: 'flex',
+            justifyContent: 'flex-end',
+            marginTop: '20px'
+        },
+        icon: {
+            width: '20px',
+            height: '20px',
+            marginRight: '8px',
+            color: '#168284'
+        }
     };
 
     return (
-        <div style={{ 
-            background: '#f9f9f9', 
-            padding: '20px', 
-            borderRadius: '8px', 
-            marginBottom: '20px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-        }}>
-            <h2 style={{ marginTop: 0 }}>{initialValues ? 'Editar Embarcación' : 'Registrar Nueva Embarcación'}</h2>
-            <form onSubmit={handleSubmit}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-                    {/* Columna 1 */}
-                    <div>
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Número de Embarcación:*</label>
+        <div style={styles.modalOverlay}>
+            <div style={styles.modalContent}>
+                <h2 style={{ color: darkMode ? 'white' : '#168284', marginBottom: '20px' }}>
+                    {initialValues.id ? 'Editar Embarcación' : 'Agregar Embarcación'}
+                </h2>
+                
+                <form onSubmit={handleSubmit}>
+                    <div style={styles.formGrid}>
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Número de Embarcación:</label>
                             <input
                                 type="text"
                                 name="numero_embarcacion"
-                                value={formValues.numero_embarcacion}
-                                onChange={handleChange}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+                                value={formData.numero_embarcacion}
+                                onChange={handleInputChange}
                                 required
+                                style={styles.input}
                             />
                         </div>
-
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Nombre de Embarcación:*</label>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Nombre de Embarcación:</label>
                             <input
                                 type="text"
                                 name="nombre_embarcacion"
-                                value={formValues.nombre_embarcacion}
-                                onChange={handleChange}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+                                value={formData.nombre_embarcacion}
+                                onChange={handleInputChange}
                                 required
+                                style={styles.input}
                             />
                         </div>
-
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Número de Permiso Náutico:*</label>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Número de Permiso Náutico:</label>
                             <input
                                 type="text"
                                 name="numero_permiso_nautico"
-                                value={formValues.numero_permiso_nautico}
-                                onChange={handleChange}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+                                value={formData.numero_permiso_nautico}
+                                onChange={handleInputChange}
                                 required
+                                style={styles.input}
                             />
                         </div>
-
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Nombre del Permisionario:*</label>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Nombre del Permisionario:</label>
                             <input
                                 type="text"
                                 name="nombre_permisionario"
-                                value={formValues.nombre_permisionario}
-                                onChange={handleChange}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+                                value={formData.nombre_permisionario}
+                                onChange={handleInputChange}
                                 required
+                                style={styles.input}
                             />
                         </div>
-
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ display: 'block', marginBottom: '5px' }}>Nombre del Representante:</label>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Nombre del Representante:</label>
                             <input
                                 type="text"
                                 name="nombre_representante"
-                                value={formValues.nombre_representante}
-                                onChange={handleChange}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+                                value={formData.nombre_representante}
+                                onChange={handleInputChange}
+                                required
+                                style={styles.input}
                             />
                         </div>
-
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Capacidad de Pasajeros:*</label>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Capacidad de Pasajeros:</label>
                             <input
                                 type="number"
                                 name="capacidad_pasajeros"
-                                value={formValues.capacidad_pasajeros}
-                                onChange={handleChange}
-                                min="1"
-                                style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+                                value={formData.capacidad_pasajeros}
+                                onChange={handleInputChange}
                                 required
+                                style={styles.input}
+                                min="1"
                             />
                         </div>
-                    </div>
-
-                    {/* Columna 2 */}
-                    <div>
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Turno de Salida:*</label>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Turno de Salida:</label>
                             <input
                                 type="text"
                                 name="turno_salida"
-                                value={formValues.turno_salida}
-                                onChange={handleChange}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+                                value={formData.turno_salida}
+                                onChange={handleInputChange}
                                 required
+                                style={styles.input}
                             />
                         </div>
-
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Hora de Salida:*</label>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Hora de Salida:</label>
                             <input
                                 type="time"
                                 name="hora_salida"
-                                value={formValues.hora_salida}
-                                onChange={handleChange}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+                                value={formData.hora_salida}
+                                onChange={handleInputChange}
                                 required
+                                style={styles.input}
+                                step="1"
                             />
                         </div>
-
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Teléfono de Contacto:*</label>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Teléfono de Contacto:</label>
                             <input
-                                type="text"
+                                type="tel"
                                 name="telefono_contacto"
-                                value={formValues.telefono_contacto}
-                                onChange={handleChange}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+                                value={formData.telefono_contacto}
+                                onChange={handleInputChange}
                                 required
+                                style={styles.input}
+                                pattern="[0-9]{10}"
+                                title="Ingrese un número de teléfono válido (10 dígitos)"
                             />
                         </div>
-
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Email de Contacto:*</label>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Email de Contacto:</label>
                             <input
                                 type="email"
                                 name="email_contacto"
-                                value={formValues.email_contacto}
-                                onChange={handleChange}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+                                value={formData.email_contacto}
+                                onChange={handleInputChange}
                                 required
+                                style={styles.input}
                             />
                         </div>
-
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Servicio Ofrecido:*</label>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Servicio Ofrecido:</label>
                             <select
                                 name="servicio_ofrecido"
-                                value={formValues.servicio_ofrecido}
-                                onChange={handleChange}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+                                value={formData.servicio_ofrecido}
+                                onChange={handleInputChange}
                                 required
+                                style={styles.input}
                             >
-                                <option value="">Seleccione un servicio</option>
-                                {servicios.map((servicio, index) => (
-                                    <option key={index} value={servicio}>{servicio}</option>
+                                <option value="">Seleccionar servicio</option>
+                                {servicios.map(servicio => (
+                                    <option key={servicio} value={servicio}>{servicio}</option>
                                 ))}
                             </select>
                         </div>
-
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Carrusel:*</label>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Vigencia Certificado Seguridad:</label>
+                            <input
+                                type="date"
+                                name="vigencia_certificado_seguridad"
+                                value={formData.vigencia_certificado_seguridad}
+                                onChange={handleInputChange}
+                                required
+                                style={styles.input}
+                            />
+                        </div>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Número Póliza Seguro:</label>
+                            <input
+                                type="text"
+                                name="numero_poliza_seguro"
+                                value={formData.numero_poliza_seguro}
+                                onChange={handleInputChange}
+                                required
+                                style={styles.input}
+                            />
+                        </div>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Teléfono Siniestros:</label>
+                            <input
+                                type="tel"
+                                name="telefono_siniestros"
+                                value={formData.telefono_siniestros}
+                                onChange={handleInputChange}
+                                required
+                                style={styles.input}
+                                pattern="[0-9]{10}"
+                                title="Ingrese un número de teléfono válido (10 dígitos)"
+                            />
+                        </div>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Carrusel:</label>
                             <select
                                 name="carrusel"
-                                value={formValues.carrusel}
-                                onChange={handleChange}
-                                style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+                                value={formData.carrusel}
+                                onChange={handleInputChange}
                                 required
+                                style={styles.input}
                             >
                                 <option value="A">Carrusel A</option>
                                 <option value="B">Carrusel B</option>
                             </select>
                         </div>
-                    </div>
-                </div>
-
-                {/* Documentos y foto */}
-                <div style={{ marginTop: '20px' }}>
-                    <h3>Documentación</h3>
-                    
-                    <div style={{ marginBottom: '15px' }}>
-                        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-                            Foto de la Embarcación (JPEG/PNG, max 2MB):*
-                            {initialValues && tieneDocumento('foto_embarcacion') && (
-                                <span style={{ color: 'green', marginLeft: '10px', fontWeight: 'normal' }}>
-                                    (Documento ya subido)
-                                </span>
+                        
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>Foto de Embarcación:</label>
+                            <input
+                                type="file"
+                                name="foto_embarcacion"
+                                onChange={handleFileChange}
+                                accept="image/*"
+                                style={{ 
+                                    width: '100%', 
+                                    padding: '8px',
+                                    color: darkMode ? 'white' : 'inherit'
+                                }}
+                            />
+                            {formData.foto_embarcacion && typeof formData.foto_embarcacion === 'string' && (
+                                <div style={{ marginTop: '10px' }}>
+                                    <img 
+                                        src={formData.foto_embarcacion} 
+                                        alt="Preview" 
+                                        style={{ 
+                                            maxWidth: '100%', 
+                                            maxHeight: '150px',
+                                            borderRadius: '8px'
+                                        }} 
+                                    />
+                                </div>
                             )}
-                        </label>
-                        <input
-                            type="file"
-                            name="foto_embarcacion"
-                            onChange={handleFileChange}
-                            accept="image/jpeg,image/png,image/jpg"
-                            required={!initialValues}
-                        />
-                    </div>
-
-                    <div style={{ marginBottom: '15px' }}>
-                        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Vigencia Certificado de Seguridad:*</label>
-                        <input
-                            type="date"
-                            name="vigencia_certificado_seguridad"
-                            value={formValues.vigencia_certificado_seguridad}
-                            onChange={handleChange}
-                            style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
-                            required
-                        />
-                    </div>
-
-                    <div style={{ marginBottom: '15px' }}>
-                        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Número de Póliza de Seguro:*</label>
-                        <input
-                            type="text"
-                            name="numero_poliza_seguro"
-                            value={formValues.numero_poliza_seguro}
-                            onChange={handleChange}
-                            style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
-                            required
-                        />
-                    </div>
-
-                    <div style={{ marginBottom: '15px' }}>
-                        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Teléfono Siniestros:*</label>
-                        <input
-                            type="text"
-                            name="telefono_siniestros"
-                            value={formValues.telefono_siniestros}
-                            onChange={handleChange}
-                            style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
-                            required
-                        />
-                    </div>
-
-                    <h4>Documentos Adicionales (PDF, max 2MB):</h4>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-                        <div>
-                            <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px' }}>
-                                    Permiso Turismo Náutico
-                                    {initialValues && tieneDocumento('permiso_turismo_nautico') && (
-                                        <span style={{ color: 'green', marginLeft: '10px' }}>(Documento ya subido)</span>
-                                    )}
-                                </label>
-                                <input
-                                    type="file"
-                                    name="permiso_turismo_nautico"
-                                    onChange={handleFileChange}
-                                    accept=".pdf"
-                                />
-                            </div>
-
-                            <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px' }}>
-                                    Permiso Pesca Deportiva
-                                    {initialValues && tieneDocumento('permiso_pesca_deportiva') && (
-                                        <span style={{ color: 'green', marginLeft: '10px' }}>(Documento ya subido)</span>
-                                    )}
-                                </label>
-                                <input
-                                    type="file"
-                                    name="permiso_pesca_deportiva"
-                                    onChange={handleFileChange}
-                                    accept=".pdf"
-                                />
-                            </div>
-
-                            <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px' }}>
-                                    Permiso Balandra CONANP
-                                    {initialValues && tieneDocumento('permiso_balandra_conanp') && (
-                                        <span style={{ color: 'green', marginLeft: '10px' }}>(Documento ya subido)</span>
-                                    )}
-                                </label>
-                                <input
-                                    type="file"
-                                    name="permiso_balandra_conanp"
-                                    onChange={handleFileChange}
-                                    accept=".pdf"
-                                />
-                            </div>
-
-                            <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px' }}>
-                                    Permiso Espíritu Santo CONANP
-                                    {initialValues && tieneDocumento('permiso_espiritu_santo_conanp') && (
-                                        <span style={{ color: 'green', marginLeft: '10px' }}>(Documento ya subido)</span>
-                                    )}
-                                </label>
-                                <input
-                                    type="file"
-                                    name="permiso_espiritu_santo_conanp"
-                                    onChange={handleFileChange}
-                                    accept=".pdf"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px' }}>
-                                    Permiso Tiburón Ballena DGVS
-                                    {initialValues && tieneDocumento('permiso_tiburon_ballena_dgvs') && (
-                                        <span style={{ color: 'green', marginLeft: '10px' }}>(Documento ya subido)</span>
-                                    )}
-                                </label>
-                                <input
-                                    type="file"
-                                    name="permiso_tiburon_ballena_dgvs"
-                                    onChange={handleFileChange}
-                                    accept=".pdf"
-                                />
-                            </div>
-
-                            <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px' }}>
-                                    Registro Nacional Turismo
-                                    {initialValues && tieneDocumento('registro_nacional_turismo') && (
-                                        <span style={{ color: 'green', marginLeft: '10px' }}>(Documento ya subido)</span>
-                                    )}
-                                </label>
-                                <input
-                                    type="file"
-                                    name="registro_nacional_turismo"
-                                    onChange={handleFileChange}
-                                    accept=".pdf"
-                                />
-                            </div>
-
-                            <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px' }}>
-                                    Registro Nacional Embarcaciones
-                                    {initialValues && tieneDocumento('registro_nacional_embarcaciones') && (
-                                        <span style={{ color: 'green', marginLeft: '10px' }}>(Documento ya subido)</span>
-                                    )}
-                                </label>
-                                <input
-                                    type="file"
-                                    name="registro_nacional_embarcaciones"
-                                    onChange={handleFileChange}
-                                    accept=".pdf"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px' }}>
-                                    Constancia Residencia/Acta Nacimiento
-                                    {initialValues && tieneDocumento('constancia_residencia_acta_nacimiento') && (
-                                        <span style={{ color: 'green', marginLeft: '10px' }}>(Documento ya subido)</span>
-                                    )}
-                                </label>
-                                <input
-                                    type="file"
-                                    name="constancia_residencia_acta_nacimiento"
-                                    onChange={handleFileChange}
-                                    accept=".pdf"
-                                />
-                            </div>
-
-                            <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px' }}>
-                                    Carta Verdad Propia Oficina
-                                    {initialValues && tieneDocumento('carta_verdad_propia_oficina') && (
-                                        <span style={{ color: 'green', marginLeft: '10px' }}>(Documento ya subido)</span>
-                                    )}
-                                </label>
-                                <input
-                                    type="file"
-                                    name="carta_verdad_propia_oficina"
-                                    onChange={handleFileChange}
-                                    accept=".pdf"
-                                />
-                            </div>
-
-                            <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px' }}>
-                                    Carta Verdad Trabajado Zona Malecón
-                                    {initialValues && tieneDocumento('carta_verdad_trabajado_zona_malecon') && (
-                                        <span style={{ color: 'green', marginLeft: '10px' }}>(Documento ya subido)</span>
-                                    )}
-                                </label>
-                                <input
-                                    type="file"
-                                    name="carta_verdad_trabajado_zona_malecon"
-                                    onChange={handleFileChange}
-                                    accept=".pdf"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px' }}>
-                                    Carta No Concesión Playa ZOFEMAT
-                                    {initialValues && tieneDocumento('carta_no_concesion_playa_zofemat') && (
-                                        <span style={{ color: 'green', marginLeft: '10px' }}>(Documento ya subido)</span>
-                                    )}
-                                </label>
-                                <input
-                                    type="file"
-                                    name="carta_no_concesion_playa_zofemat"
-                                    onChange={handleFileChange}
-                                    accept=".pdf"
-                                />
-                            </div>
-
-                            <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px' }}>
-                                    Permiso Uso Muelle Fiscal API
-                                    {initialValues && tieneDocumento('permiso_uso_muelle_fiscal_api') && (
-                                        <span style={{ color: 'green', marginLeft: '10px' }}>(Documento ya subido)</span>
-                                    )}
-                                </label>
-                                <input
-                                    type="file"
-                                    name="permiso_uso_muelle_fiscal_api"
-                                    onChange={handleFileChange}
-                                    accept=".pdf"
-                                />
-                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-                    <button
-                        type="submit"
-                        style={{ 
-                            padding: '10px 20px', 
-                            background: '#1890ff', 
-                            color: 'white', 
-                            border: 'none', 
-                            borderRadius: '4px', 
-                            cursor: 'pointer'
-                        }}
-                    >
-                        {initialValues ? 'Actualizar Embarcación' : 'Registrar Embarcación'}
-                    </button>
-                    <button
-                        type="button"
-                        onClick={onCancel}
-                        style={{ 
-                            padding: '10px 20px', 
-                            background: '#f0f0f0', 
-                            color: '#333', 
-                            border: '1px solid #d9d9d9', 
-                            borderRadius: '4px', 
-                            cursor: 'pointer'
-                        }}
-                    >
-                        Cancelar
-                    </button>
-                </div>
-            </form>
+                    
+                    <div style={styles.buttonGroup}>
+                        <button
+                            type="button"
+                            onClick={onCancel}
+                            style={{
+                                ...styles.button,
+                                background: '#ff4d4f'
+                            }}
+                        >
+                            Cancelar
+                        </button>
+                        <button
+                            type="submit"
+                            style={{
+                                ...styles.button,
+                                background: '#168284'
+                            }}
+                        >
+                            {initialValues.id ? 'Actualizar' : 'Guardar'}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

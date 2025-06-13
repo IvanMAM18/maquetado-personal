@@ -197,7 +197,7 @@ export default function CardReports() {
                             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                             padding: '20px',
                             width: '100%',
-                            minHeight: '90vh',
+                            minHeight: '91.8vh',
                             color: darkMode ? '#fff' : '#333'
                         }}>
                             <Routes>

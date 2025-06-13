@@ -50,36 +50,46 @@ class EjemploEmbarcacionController extends Controller
             'nombre_embarcacion' => 'required',
             'foto_embarcacion' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
+    
         $data = $request->except('foto_embarcacion');
-
+    
         try {
-            if ($request->hasFile('foto_embarcacion')) {
-                $file = $request->file('foto_embarcacion');
-                $folderName = 'embarcaciones/' . ($request->carrusel === 'A' ? 'carrusel_A' : 'carrusel_B');
-                
-                $fileName = 'embarcacion_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-                $path = $file->storeAs($folderName, $fileName, 'public');
-                $data['foto_embarcacion'] = Storage::url($path);
-            }
-
+            // Primero creamos la embarcación para obtener el ID
             $embarcacion = EjemploEmbarcacion::create($data);
             
-            // Mover a carpeta con ID si es nuevo registro
             if ($request->hasFile('foto_embarcacion')) {
-                $newFolderName = 'embarcaciones/' . ($request->carrusel === 'A' ? 'carrusel_A' : 'carrusel_B') . '/' . $embarcacion->id;
-                $newPath = str_replace($folderName, $newFolderName, $path);
-                Storage::move($path, $newPath);
-                $embarcacion->foto_embarcacion = Storage::url($newPath);
-                $embarcacion->save();
+                $file = $request->file('foto_embarcacion');
+                $carpetaCarrusel = $request->carrusel === 'A' ? 'carrusel_A' : 'carrusel_B';
+                $folderPath = public_path("storage/embarcaciones/{$carpetaCarrusel}");
+                
+                // Crear directorios si no existen
+                if (!file_exists($folderPath)) {
+                    mkdir($folderPath, 0777, true);
+                }
+                
+                $fileName = 'embarcacion_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+                
+                // Mover el archivo directamente a public/storage
+                $file->move($folderPath, $fileName);
+                
+                // Guardar la ruta relativa en la base de datos
+                $data['foto_embarcacion'] = "/storage/embarcaciones/{$carpetaCarrusel}/{$fileName}";
+                
+                // Actualizar la embarcación con la ruta de la imagen
+                $embarcacion->update(['foto_embarcacion' => $data['foto_embarcacion']]);
             }
-
+    
             return response()->json([
                 'embarcacion' => $embarcacion,
                 'success' => true
             ]);
-
+    
         } catch (\Throwable $th) {
+            // Si ocurre un error, eliminamos la embarcación creada
+            if (isset($embarcacion)) {
+                $embarcacion->delete();
+            }
+            
             return response()->json([
                 'error' => $th->getMessage(),
                 'success' => false
@@ -90,36 +100,62 @@ class EjemploEmbarcacionController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'numero_embarcacion' => 'required',
-            'nombre_embarcacion' => 'required',
+            'numero_embarcacion' => 'required|string',
+            'nombre_embarcacion' => 'required|string',
+            'numero_permiso_nautico' => 'required|string',
+            'nombre_permisionario' => 'required|string',
+            'nombre_representante' => 'required|string',
+            'capacidad_pasajeros' => 'required|integer',
+            'turno_salida' => 'required|string',
+            'hora_salida' => 'required|date_format:H:i:s',
+            'telefono_contacto' => 'required|string',
+            'email_contacto' => 'required|email',
+            'servicio_ofrecido' => 'required|string',
+            'vigencia_certificado_seguridad' => 'required|date',
+            'numero_poliza_seguro' => 'required|string',
+            'telefono_siniestros' => 'required|string',
+            'carrusel' => 'required|in:A,B',
             'foto_embarcacion' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
+    
         $embarcacion = EjemploEmbarcacion::findOrFail($id);
         $data = $request->except('foto_embarcacion');
-
+    
         try {
             if ($request->hasFile('foto_embarcacion')) {
                 // Eliminar foto anterior si existe
                 if ($embarcacion->foto_embarcacion) {
-                    $oldPath = str_replace('/storage', '', $embarcacion->foto_embarcacion);
-                    Storage::disk('public')->delete($oldPath);
+                    $oldPath = public_path(str_replace('/storage', '', $embarcacion->foto_embarcacion));
+                    if (file_exists($oldPath)) {
+                        unlink($oldPath);
+                    }
                 }
-
+    
                 $file = $request->file('foto_embarcacion');
-                $folderName = 'embarcaciones/' . ($request->carrusel === 'A' ? 'carrusel_A' : 'carrusel_B') . '/' . $id;
+                $carpetaCarrusel = $request->carrusel === 'A' ? 'carrusel_A' : 'carrusel_B';
+                $folderPath = public_path("storage/embarcaciones/{$carpetaCarrusel}");
+                
+                // Crear directorios si no existen
+                if (!file_exists($folderPath)) {
+                    mkdir($folderPath, 0777, true);
+                }
+                
                 $fileName = 'embarcacion_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-                $path = $file->storeAs($folderName, $fileName, 'public');
-                $data['foto_embarcacion'] = Storage::url($path);
+                
+                // Mover el archivo directamente a public/storage
+                $file->move($folderPath, $fileName);
+                
+                // Guardar la ruta relativa en la base de datos
+                $data['foto_embarcacion'] = "/storage/embarcaciones/{$carpetaCarrusel}/{$fileName}";
             }
-
+    
             $embarcacion->update($data);
-
+    
             return response()->json([
                 'embarcacion' => $embarcacion,
                 'success' => true
             ]);
-
+    
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage(),
@@ -135,17 +171,16 @@ class EjemploEmbarcacionController extends Controller
             
             // Eliminar foto si existe
             if ($embarcacion->foto_embarcacion) {
-                $path = str_replace('/storage', '', $embarcacion->foto_embarcacion);
-                Storage::disk('public')->delete($path);
-                // Eliminar carpeta
-                $folderPath = dirname($path);
-                Storage::disk('public')->deleteDirectory($folderPath);
+                $path = public_path(str_replace('/storage', '', $embarcacion->foto_embarcacion));
+                if (file_exists($path)) {
+                    unlink($path);
+                }
             }
             
             $embarcacion->delete();
-
+    
             return response()->json(['success' => true]);
-
+    
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage(),

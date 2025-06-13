@@ -22,7 +22,7 @@ export default function MenuBar({ userData, onToggle, darkMode, toggleDarkMode }
     const colors = {
         light: {
             menuBackground: '#ffffff',            
-            menuGradient: 'linear-gradient(135deg,rgb(255, 255, 255) 0%,rgb(244, 244, 244) 100%)',     
+            menuGradient: 'linear-gradient(135deg,rgb(255, 255, 255) 0%,rgb(255, 255, 255) 100%)',     
             textColor: '#168284',                  
             activeTextColor: '#168284',            
             hoverTooltip: '#f0f9f9',                
@@ -240,7 +240,7 @@ export default function MenuBar({ userData, onToggle, darkMode, toggleDarkMode }
                     backgroundColor: currentColors.menuBackground,
                     background: currentColors.menuGradient,
                     boxShadow: currentColors.shadow,
-                    height: '95.8vh',
+                    height: '97vh',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
