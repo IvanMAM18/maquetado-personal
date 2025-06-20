@@ -1,14 +1,15 @@
 {
     "/js/app.js": "/js/app.js?id=1ca6dda4ba8edca0ccef6abfb6172a99",
-    "/js/dashboard_admin/pages/dashboardHome.js": "/js/dashboard_admin/pages/dashboardHome.js?id=97e46fbf2e6be0361892b76ecc72713d",
-    "/js/dashboard_admin/pages/embarcaciones.js": "/js/dashboard_admin/pages/embarcaciones.js?id=a751039116cfd3be3543cc32bce70e7c",
-    "/js/dashboard_admin/pages/embarcacionesCarruselA.js": "/js/dashboard_admin/pages/embarcacionesCarruselA.js?id=5035d5586dd05af0a092889d4fd526f8",
-    "/js/dashboard_admin/pages/embarcacionesCarruselB.js": "/js/dashboard_admin/pages/embarcacionesCarruselB.js?id=cfea9e8b51ff00964dbbafe438255924",
+    "/js/dashboard_admin/pages/embarcaciones/embarcaciones.js": "/js/dashboard_admin/pages/embarcaciones/embarcaciones.js?id=cc1176116fe326194d27face6708c55b",
+    "/js/dashboard_admin/pages/embarcaciones/mode/embarcacionesMovil.js": "/js/dashboard_admin/pages/embarcaciones/mode/embarcacionesMovil.js?id=fd52e846f8db3f0de8f2de9dc1f45a9b",
+    "/js/dashboard_admin/pages/embarcaciones/mode/embarcacionesWeb.js": "/js/dashboard_admin/pages/embarcaciones/mode/embarcacionesWeb.js?id=e434f8ae3631275e8bd8d054419fc24a",
     "/js/dashboard_admin/pages/perfil.js": "/js/dashboard_admin/pages/perfil.js?id=86f416ad5f63a29890cc005651b3b9dd",
     "/js/dashboard_admin/pages/usuarios.js": "/js/dashboard_admin/pages/usuarios.js?id=ee9489338df2ca39246537fc3d6cc42d",
-    "/js/dashboard_admin/home_reports.js": "/js/dashboard_admin/home_reports.js?id=a4310417b0df9edc98402f1ad58b4b30",
+    "/js/dashboard_admin/home_reports.js": "/js/dashboard_admin/home_reports.js?id=76b13727613b770a03dcbe8a2615c421",
     "/js/components/layouts/Header.js": "/js/components/layouts/Header.js?id=1f441f2d86189a370ef2db3eabbca074",
     "/js/components/layouts/Footer.js": "/js/components/layouts/Footer.js?id=dbb45b07c2b603fa12ac0b6c851b2b2a",
-    "/js/components/MenuBar.js": "/js/components/MenuBar.js?id=dd5ac4b3fee2ec8742e3287c38ed6277",
+    "/js/components/MenuBar.js": "/js/components/MenuBar.js?id=d6c603a3c6291f342c94bda971c21bac",
+    "/js/components/modeMenu/MenuBarWeb.js": "/js/components/modeMenu/MenuBarWeb.js?id=af4b85470d9a58c3533ad0704bdacdb0",
+    "/js/components/modeMenu/MenuBarMovil.js": "/js/components/modeMenu/MenuBarMovil.js?id=0d943e336f858c9fd37d29b0d7bf839c",
     "/css/app.css": "/css/app.css?id=347387b48c52a961201fe1b3b1929555"
 }

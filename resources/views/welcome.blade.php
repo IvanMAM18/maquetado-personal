@@ -8,6 +8,6 @@
     </div>
         @include('includes.scripts')
         <script src="{{ mix('js/app.js') }}" defer></script>
-        <script src="{{ mix('js/ExpoEmprendedores.js') }}" defer></script>
+        
     </body>
 </html>

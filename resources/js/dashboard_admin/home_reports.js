@@ -3,10 +3,7 @@ import ReactDOM from "react-dom";
 import axios from "axios";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import MenuBar from "../components/MenuBar";
-import DashboardHome from "./pages/dashboardHome";
-import Embarcaciones from "./pages/embarcaciones";
-import EmbarcacionesCarruselA from "./pages/embarcacionesCarruselA";
-import EmbarcacionesCarruselB from "./pages/embarcacionesCarruselB";
+import Embarcaciones from "./pages/embarcaciones/embarcaciones";
 import Perfil from "./pages/perfil";
 import Usuarios from "./pages/usuarios";
 
@@ -17,8 +14,6 @@ function PageTitle() {
   const getPageTitle = () => {
     const path = location.pathname;
     if (path.includes('embarcaciones')) return 'Embarcaciones';
-    if (path.includes('embarcacionesCarruselA')) return 'Embarcaciones Carrusel A';
-    if (path.includes('embarcacionesCarruselB')) return 'Embarcaciones Carrusel B';
     if (path.includes('usuarios')) return 'Usuarios';
     if (path.includes('perfil')) return 'Perfil';
     return 'Inicio';
@@ -31,7 +26,22 @@ export default function CardReports() {
     const [userData, setUserData] = useState(null);
     const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(() => {
+    const savedMode = localStorage.getItem('darkMode');
+        return savedMode ? JSON.parse(savedMode) : false;
+    });
+
+    const [isMobile, setIsMobile] = useState(false);
+  
+    useEffect(() => {
+          const handleResize = () => {
+              setIsMobile(window.innerWidth < 1000);
+          };
+  
+          handleResize();
+          window.addEventListener('resize', handleResize);
+          return () => window.removeEventListener('resize', handleResize);
+    }, []);
     
     const checkUser = async () => {
         try {
@@ -49,14 +59,16 @@ export default function CardReports() {
 
     useEffect(() => {
         checkUser();
-    }, []);
-
-    const handleMenuToggle = (collapsed) => {
-        setIsMenuCollapsed(collapsed);
-    };
+        localStorage.setItem('darkMode', JSON.stringify(darkMode));
+        document.body.style.backgroundColor = darkMode ? '#121212' : '#f5f7fa';
+    }, [darkMode]);
 
     const toggleDarkMode = () => {
         setDarkMode(!darkMode);
+    };
+
+    const handleMenuToggle = (collapsed) => {
+        setIsMenuCollapsed(collapsed);
     };
 
     if (loading) {
@@ -91,7 +103,7 @@ export default function CardReports() {
                     left: 0,
                     width: '100%',
                     height: '100%',
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' stroke-width='1.5' stroke='${darkMode ? '%23ffffff' : '%23000000'}' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 9v12m-8 -8a8 8 0 0 0 16 0m1 0h-2m-14 0h-2' /%3E%3Ccircle cx='12' cy='6' r='3' /%3E%3C/svg%3E")`,
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' strokeWidth='1.5' stroke='${darkMode ? '%23ffffff' : '%23000000'}' fill='none' strokeLinecap='round' strokeLinejoin='round'%3E%3Cpath stroke='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 9v12m-8 -8a8 8 0 0 0 16 0m1 0h-2m-14 0h-2' /%3E%3Ccircle cx='12' cy='6' r='3' /%3E%3C/svg%3E")`,
                     backgroundSize: '20px 20px',
                     backgroundRepeat: 'repeat',
                     opacity: 0.05,
@@ -114,8 +126,8 @@ export default function CardReports() {
                     opacity: 0.1
                 }}>
                     <svg width="100%" height="100%" viewBox="0 0 24 24" strokeWidth="3" 
-                         stroke={darkMode ? '#ffffff' : '#000000'} fill="none" 
-                         style={{ animation: 'pulse 15s infinite alternate' }}>
+                        stroke={darkMode ? '#ffffff' : '#000000'} fill="none" 
+                        style={{ animation: 'pulse 15s infinite alternate' }}>
                         <path stroke="none" d="M0 0h24v24H0z"/>  
                         <path d="M12 9v12m-8 -8a8 8 0 0 0 16 0m1 0h-2m-14 0h-2" />  
                         <circle cx="12" cy="6" r="3" />
@@ -127,17 +139,19 @@ export default function CardReports() {
                     position: 'relative',
                     zIndex: 1,
                     display: 'flex',
-                    width: '100%'
+                    width: '100%',
+                    height: '100vh',
                 }}>
                     <MenuBar userData={userData} onToggle={handleMenuToggle} darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
                     
                     <div style={{ 
                         flex: 1,
-                        padding: '20px',
                         width: '100%',
+                        padding: '20px',
                         transition: 'margin-left 0.3s ease',
                         overflowX: 'hidden',
                     }}>
+                        
                         {/* Barra superior */}
                         <div style={{ 
                             display: 'flex',
@@ -150,39 +164,54 @@ export default function CardReports() {
                             marginBottom: '20px',
                             color: darkMode ? '#fff' : '#333'
                         }}>
-                            <PageTitle />
+                            {/* Título de la página - siempre visible */}
+                            <span style={{ 
+                                marginRight: '15px', 
+                                fontWeight: '500',
+                                fontSize: isMobile ? '0.8rem' : '1rem',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                maxWidth: isMobile ? '120px' : 'none'
+                            }}>
+                                <PageTitle />
+                            </span>
                             
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                            <div style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: isMobile ? '10px' : '20px' 
+                            }}>
+                                {/* Botón de modo oscuro/claro - solo icono en móvil */}
                                 <button onClick={toggleDarkMode} style={{
                                     background: 'none',
                                     border: 'none',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '5px',
-                                    color: darkMode ? '#fff' : '#333'
+                                    gap: isMobile ? '0' : '5px',
+                                    color: darkMode ? '#fff' : '#333',
+                                    padding: isMobile ? '5px' : '0'
                                 }}>
                                     {darkMode ? (
-                                        <>
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                                            </svg>
-                                            Modo claro
-                                        </>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                                        </svg>
                                     ) : (
-                                        <>
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                                            </svg>
-                                            Modo oscuro
-                                        </>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                        </svg>
                                     )}
+                                    {!isMobile && (darkMode ? 'Modo claro' : 'Modo oscuro')}
                                 </button>
                                 
+                                {/* Nombre de usuario - solo visible si hay espacio */}
                                 {userData && (
                                     <span style={{ 
                                         color: darkMode ? '#fff' : '#333',
-                                        fontWeight: '500'
+                                        fontWeight: '500',
+                                        fontSize: isMobile ? '0.8rem' : '1rem',
+                                        display: isMobile && window.innerWidth < 400 ? 'none' : 'block'
                                     }}>
                                         {userData.name}
                                     </span>
@@ -194,21 +223,20 @@ export default function CardReports() {
                         <div style={{
                             backgroundColor: darkMode ? '#1e1e1e' : '#ffffff',
                             borderRadius: '8px',
-                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                            padding: '20px',
                             width: '100%',
-                            minHeight: '91.8vh',
-                            color: darkMode ? '#fff' : '#333'
+                            height: 'calc(100vh - 100px)', // Ajusta la altura para el menú
+                            marginBottom: isMobile ? '60px' : '', // Espacio para el menú
+                            color: darkMode ? '#fff' : '#333',
+                            overflowY: 'auto' // Permite scroll si el contenido es largo
                         }}>
-                            <Routes>
-                                <Route path="/" element={<Embarcaciones darkMode={darkMode} />} />
-                                <Route path="/embarcaciones_carrusel_A" element={<EmbarcacionesCarruselA darkMode={darkMode} />} />
-                                <Route path="/embarcaciones_carrusel_B" element={<EmbarcacionesCarruselB darkMode={darkMode} />} />
-                                <Route path="/perfil" element={<Perfil darkMode={darkMode} />} />
-                                <Route path="/usuarios" element={<Usuarios darkMode={darkMode} />} />
-                                <Route path="*" element={<Navigate to="/" replace />} />
-                            </Routes>
+                        <Routes>
+                            <Route path="/" element={<Embarcaciones darkMode={darkMode} />} />
+                            <Route path="/perfil" element={<Perfil darkMode={darkMode} />} />
+                            <Route path="/usuarios" element={<Usuarios darkMode={darkMode} />} />
+                            <Route path="*" element={<Navigate to="/" replace />} />
+                        </Routes>
                         </div>
+
                     </div>
                 </div>
                 
